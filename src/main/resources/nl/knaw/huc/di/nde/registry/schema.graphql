@@ -1,0 +1,12 @@
+type Query {
+#  terms(match : String, dataset : [ID!]) : [Term]
+  terms(match : String) : [Term]
+}
+
+type Term {
+  uri: String
+  prefLabel: [String]
+  altLabel: [String]
+  scopeNote: [String]
+  definition: [String]
+}
