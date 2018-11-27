@@ -12,7 +12,7 @@ $ mvn "-Dexec.args=-classpath %classpath nl.knaw.huc.di.nde.Main" -Dexec.executa
 ## Endpoints
 
 1. [GraphQL](https://graphql.org/) endpoint: http://localhost:8080/nde/graphql
-2. GraphiQL endpoint: http://localhost:8080/static/graphiql/index.html
+2. [GraphiQL](https://github.com/graphql/graphiql) endpoint: http://localhost:8080/static/graphiql/index.html
 
 ## Queries
 
