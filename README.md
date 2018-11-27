@@ -6,7 +6,7 @@ Pilot implementation for the NDE Termennetwerk created for the CLARIAH Techdag N
 
 ```sh
 $ mvn build
-$ mvn "-Dexec.args=-classpath %classpath nl.knaw.huc.di.nde.Main" -Dexec.executable=java org.codehaus.mojo:exec-maven-plugin:1.5.0:exec
+$ mvn "-Dexec.args=-Dexec.args=-Dnde.config=`pwd`/conf/termbases.xml -classpath %classpath nl.knaw.huc.di.nde.Main" -Dexec.executable=java org.codehaus.mojo:exec-maven-plugin:1.5.0:exec
 ```
 
 ## Endpoints
@@ -21,15 +21,15 @@ The GraphIQL endpoint is hardwired to the NDE Termennetwerk GraphQL endpoint and
 Example query:
 
 ```graphql
-query { terms(match:"foo") {uri} }
+query { terms(match:"dutch",dataset:"clavas") {uri} }
 ```
 
 ```sh
-$ curl -XPOST -H 'Content-Type:application/graphql'  -d 'query { terms(match:"foo") {uri} }' http://localhost:8080/nde/graphql
+$ curl -XPOST -H 'Content-Type:application/graphql'  -d 'query { terms(match:"dutch",dataset:"clavas") {uri} }' http://localhost:8080/nde/graphql
 ```
 
 ## TODO
 
-* [ ] dataset plugins
+* [x] dataset plugins
 * [ ] query multiple datasets and merge the results
 * [ ] ...

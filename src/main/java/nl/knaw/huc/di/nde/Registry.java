@@ -19,8 +19,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
@@ -29,6 +32,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.xml.transform.stream.StreamSource;
+import net.sf.saxon.s9api.XdmAtomicValue;
+import net.sf.saxon.s9api.XdmItem;
+import net.sf.saxon.s9api.XdmNode;
+import nl.knaw.huc.di.nde.recipe.RecipeInterface;
+import nl.mpi.tla.util.Saxon;
 
 @Path("graphql")
 public class Registry {
@@ -37,6 +46,11 @@ public class Registry {
     private final ObjectMapper objectMapper;
     private final GraphQL.Builder builder;
 
+    final static public Map<String,String> NAMESPACES = new LinkedHashMap<>();
+    
+    static {
+        NAMESPACES.put("nde", "https://www.netwerkdigitaalerfgoed.nl/");
+    };
 
     public Registry() throws IOException {
         this.schema = Resources.toString(Registry.class.getResource("/nl/knaw/huc/di/nde/registry/schema.graphql"), Charsets.UTF_8);
@@ -50,10 +64,11 @@ public class Registry {
             public List<TermDTO> get(DataFetchingEnvironment environment) {
                 List<TermDTO> terms = null;
                 String match = environment.getArgument("match");
-                if (match != null) {
-                    terms = fetchMatchingTerms(match);
+                String dataset = environment.getArgument("dataset");
+                if (match!=null && dataset!=null) {
+                    terms = fetchMatchingTerms(match,dataset);
                 } else {
-                    terms = fetchTermsSample();
+                    terms = new ArrayList<TermDTO>();
                 }
                 return terms;
             }
@@ -66,12 +81,22 @@ public class Registry {
         builder = GraphQL.newGraphQL(schemaGenerator.makeExecutableSchema(typeRegistry, runtime));
     }
     
-    private List<TermDTO> fetchMatchingTerms(String match) {
-        System.err.println("DBG: match["+match+"]");
-        return new ArrayList<TermDTO>();
-    }
-    
-    private List<TermDTO> fetchTermsSample() {
+    private List<TermDTO> fetchMatchingTerms(String match,String dataset) {
+        try {
+            System.err.println("DBG: config["+System.getProperty("nde.config")+"]");
+            System.err.println("DBG: match["+match+"]");
+            System.err.println("DBG: dataset["+dataset+"]");
+            XdmNode config = Saxon.buildDocument(new StreamSource(System.getProperty("nde.config")));
+            Map vars = new HashMap();
+            vars.put("dataset", new XdmAtomicValue(dataset));
+            XdmItem dsConfig = Saxon.xpathSingle(config, "//nde:dataset[@id=$dataset]", vars, NAMESPACES);
+            String recipe = Saxon.xpath2string(dsConfig, "@recipe", null, NAMESPACES);
+            Class<RecipeInterface> clazz = (Class<RecipeInterface>) Class.forName(recipe);
+            RecipeInterface recipeImpl = clazz.newInstance();
+            return recipeImpl.fetchMatchingTerms(dsConfig, match);
+        } catch (Exception ex) {
+            Logger.getLogger(Registry.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return new ArrayList<TermDTO>();
     }
     

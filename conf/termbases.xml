@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nde:NDE xmlns:nde="https://www.netwerkdigitaalerfgoed.nl/">
+    <nde:dataset id="clavas" recipe="nl.knaw.huc.di.nde.recipe.OpenSKOS">
+        <nde:label xml:lang="nl">CLAVAS: ISO 639-3 taalcodes</nde:label>
+        <nde:api>https://clavas.clarin.eu/clavas/public/api</nde:api>
+        <nde:conceptScheme>http://hdl.handle.net/11459/CLAVAS_810f8d2a-6723-3ba6-2e57-41d6d3844816</nde:conceptScheme>
+    </nde:dataset>
+</nde:NDE>

@@ -1,6 +1,5 @@
 type Query {
-#  terms(match : String, dataset : [ID!]) : [Term]
-  terms(match : String) : [Term]
+  terms(match : String!, dataset : ID!) : [Term]
 }
 
 type Term {
