@@ -11,4 +11,4 @@ RUN mvn package
 
 EXPOSE 8080
 
-ENTRYPOINT ["mvn","-Dexec.args=-Dexec.args=-Dnde.config=`pwd`/conf/termennetwerk.xml -classpath %classpath nl.knaw.huc.di.nde.Main", "-Dexec.executable=java", "org.codehaus.mojo:exec-maven-plugin:1.5.0:exec"]
+ENTRYPOINT ["mvn","-Dexec.args=-Dnde.config=/app/nde-termennetwerk/conf/termennetwerk.xml -classpath %classpath nl.knaw.huc.di.nde.Main", "-Dexec.executable=java", "org.codehaus.mojo:exec-maven-plugin:1.5.0:exec"]

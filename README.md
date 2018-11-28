@@ -43,4 +43,6 @@ $ curl -XPOST -H 'Content-Type:application/graphql'  -d 'query { terms(match:"Ab
 * [ ] keep the languages
 * [ ] query multiple datasets and merge the results
 * [ ] fuller support for the NDE API design
+* [ ] how to deal with different response times
+* [ ] use Dropwizard
 * [ ] ...
