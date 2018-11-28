@@ -49,7 +49,11 @@ public class Registry {
     final static public Map<String,String> NAMESPACES = new LinkedHashMap<>();
     
     static {
-        NAMESPACES.put("nde", "https://www.netwerkdigitaalerfgoed.nl/");
+        NAMESPACES.put("dc",      "http://purl.org/dc/elements/1.1/");
+        NAMESPACES.put("dcterms", "http://purl.org/dc/terms/");
+        NAMESPACES.put("nde",     "https://www.netwerkdigitaalerfgoed.nl/");
+        NAMESPACES.put("rdf",     "http://www.w3.org/1999/02/22-rdf-syntax-ns#");
+        NAMESPACES.put("skos",    "http://www.w3.org/2004/02/skos/core#");
     };
 
     public Registry() throws IOException {

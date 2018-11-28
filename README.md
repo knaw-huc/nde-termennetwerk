@@ -21,15 +21,18 @@ The GraphIQL endpoint is hardwired to the NDE Termennetwerk GraphQL endpoint and
 Example query:
 
 ```graphql
-query { terms(match:"dutch",dataset:"clavas") {uri} }
+query { terms(match:"Abkhazian",dataset:"clavas") {uri, altLabel} }
 ```
 
 ```sh
-$ curl -XPOST -H 'Content-Type:application/graphql'  -d 'query { terms(match:"dutch",dataset:"clavas") {uri} }' http://localhost:8080/nde/graphql
+$ curl -XPOST -H 'Content-Type:application/graphql'  -d 'query { terms(match:"Abkhazian",dataset:"clavas") {uri, altLabel} }' http://localhost:8080/nde/graphql
 ```
 
 ## TODO
 
-* [x] dataset plugins
+* [x] load dataset recipe
+* [x] example dataset recipe
+* [ ] docker setup
+* [ ] keep the languages
 * [ ] query multiple datasets and merge the results
 * [ ] ...
