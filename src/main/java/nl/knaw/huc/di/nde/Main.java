@@ -23,7 +23,7 @@ import org.glassfish.jersey.message.internal.ReaderWriter;
  */
 public class Main {
     // Base URI the Grizzly HTTP server will listen on
-    public static final String BASE_URI = "http://localhost:8080/nde/";
+    public static final String BASE_URI = "http://0.0.0.0:8080/nde/";
     public static final String APP_PATH = "/static";
     public static final String WEB_ROOT = "/static";
 
