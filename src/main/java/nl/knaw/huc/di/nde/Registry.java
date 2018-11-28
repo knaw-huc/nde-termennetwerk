@@ -47,7 +47,6 @@ public class Registry {
     private final GraphQL.Builder builder;
 
     final static public Map<String,String> NAMESPACES = new LinkedHashMap<>();
-    
     static {
         NAMESPACES.put("dc",      "http://purl.org/dc/elements/1.1/");
         NAMESPACES.put("dcterms", "http://purl.org/dc/terms/");
@@ -85,7 +84,8 @@ public class Registry {
         builder = GraphQL.newGraphQL(schemaGenerator.makeExecutableSchema(typeRegistry, runtime));
     }
     
-    private List<TermDTO> fetchMatchingTerms(String match,String dataset) {
+    private List<TermDTO> fetchMatchingTerms(String match,String dataset) {        
+        List<TermDTO> res = new ArrayList<>();
         try {
             System.err.println("DBG: config["+System.getProperty("nde.config")+"]");
             System.err.println("DBG: match["+match+"]");
@@ -94,15 +94,23 @@ public class Registry {
             Map vars = new HashMap();
             vars.put("dataset", new XdmAtomicValue(dataset));
             XdmItem dsConfig = Saxon.xpathSingle(config, "//nde:dataset[@id=$dataset]", vars, NAMESPACES);
-            String recipe = Saxon.xpath2string(dsConfig, "@recipe", null, NAMESPACES);
-            Class<RecipeInterface> clazz = (Class<RecipeInterface>) Class.forName(recipe);
-            RecipeInterface recipeImpl = clazz.newInstance();
-            return recipeImpl.fetchMatchingTerms(dsConfig, match);
+            if (dsConfig != null) {
+                String recipe = Saxon.xpath2string(dsConfig, "@recipe", null, NAMESPACES);
+                if (!recipe.isEmpty()) {
+                    Class<RecipeInterface> clazz = (Class<RecipeInterface>) Class.forName(recipe);
+                    RecipeInterface recipeImpl = clazz.newInstance();
+                    res = recipeImpl.fetchMatchingTerms(dsConfig, match);
+                } else
+                    Logger.getLogger(Registry.class.getName()).log(Level.SEVERE,"Recipe of dataset["+dataset+"] is unknown!");
+            } else
+                Logger.getLogger(Registry.class.getName()).log(Level.SEVERE,"Unknown dataset["+dataset+"]!");
         } catch (Exception ex) {
             Logger.getLogger(Registry.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return new ArrayList<TermDTO>();
+        return res;
     }
+    
+    // GraphQL
     
     @POST
     @Consumes("application/json")
@@ -110,7 +118,6 @@ public class Registry {
                            @HeaderParam("accept") String acceptHeader,
                            @QueryParam("accept") String acceptParam,
                            @HeaderParam("Authorization") String authHeader) {
-        System.err.println("DBG: postJson");
         final String queryFromBody;
         if (body.has("query")) {
             queryFromBody = body.get("query").asText();
@@ -140,7 +147,6 @@ public class Registry {
                                 @HeaderParam("accept") String acceptHeader,
                                 @QueryParam("accept") String acceptParam,
                                 @HeaderParam("Authorization") String authHeader) {
-        System.err.println("DBG: postGraphgl");
         return executeGraphql(queryParam, acceptHeader, acceptParam, query, null, null, authHeader);
     }
 
@@ -148,7 +154,6 @@ public class Registry {
     public Response get(@QueryParam("query") String query, @HeaderParam("accept") String acceptHeader,
                         @QueryParam("accept") String acceptParam,
                         @HeaderParam("Authorization") String authHeader) {
-        System.err.println("DBG: get");
         return executeGraphql(null, acceptHeader, acceptParam, query, null, null, authHeader);
     }
 
@@ -179,7 +184,6 @@ public class Registry {
               "E.g. {query: \\\"{\\n  persons {\\n ... \\\"}\"]}")
             .build();
         }
-        
 
         GraphQL graphQl = builder.build();
 
@@ -190,22 +194,18 @@ public class Registry {
               .operationName(operationName)
               .variables(variables == null ? Collections.emptyMap() : variables)
               .build());
-            System.err.println("DBG: result["+result+"]"); 
             return Response
               .ok()
               .type(MediaType.APPLICATION_JSON_TYPE)
               .entity(result.toSpecification())
               .build();
         } catch (GraphQLException e) {
-            System.err.println("ERR: "+e.getMessage());
             return Response.status(500).entity(e.getMessage()).build();
             // throw e;
         }
-  }
+    }
 
-
-  public boolean unSpecifiedAcceptHeader(@HeaderParam("accept") String acceptHeader) {
-    return acceptHeader == null || acceptHeader.isEmpty() || "*/*".equals(acceptHeader);
-  }
-    
+    public boolean unSpecifiedAcceptHeader(@HeaderParam("accept") String acceptHeader) {
+        return acceptHeader == null || acceptHeader.isEmpty() || "*/*".equals(acceptHeader);
+    }
 }

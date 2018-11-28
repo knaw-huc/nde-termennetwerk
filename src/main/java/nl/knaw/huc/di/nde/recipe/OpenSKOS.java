@@ -19,10 +19,6 @@ import nl.knaw.huc.di.nde.Registry;
 import nl.knaw.huc.di.nde.TermDTO;
 import nl.mpi.tla.util.Saxon;
 
-/**
- *
- * @author menzowi
- */
 public class OpenSKOS implements RecipeInterface {
     
     final static public Map<String,String> NAMESPACES = new LinkedHashMap<>();

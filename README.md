@@ -42,4 +42,5 @@ $ curl -XPOST -H 'Content-Type:application/graphql'  -d 'query { terms(match:"Ab
 * [x] docker setup
 * [ ] keep the languages
 * [ ] query multiple datasets and merge the results
+* [ ] fuller support for the NDE API design
 * [ ] ...
