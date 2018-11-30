@@ -25,7 +25,8 @@ import java.net.URL;
 import java.util.Scanner;
 import org.json.*;
 
-public class WikiData implements RecipeInterface {
+//TODO: Get this to inherit nicely from Wikdata recipe
+public class WikiDataGTAAConcepts implements RecipeInterface {
     
     final static public Map<String,String> NAMESPACES = new LinkedHashMap<>();
     
@@ -62,15 +63,16 @@ public class WikiData implements RecipeInterface {
         List<TermDTO> terms = new ArrayList<>();
         try {
             System.err.println("DBG: Lets cook some WikiData!");
-            String api = Saxon.xpath2string(config, "nde:api", null, WikiData.NAMESPACES);
-            String cs  = Saxon.xpath2string(config, "nde:conceptScheme", null, WikiData.NAMESPACES);
+            String api = Saxon.xpath2string(config, "nde:api", null, WikiDataGTAAConcepts.NAMESPACES);
+            String cs  = Saxon.xpath2string(config, "nde:conceptScheme", null, WikiDataGTAAConcepts.NAMESPACES);
             System.err.println("DBG: Ingredients:");
-            System.err.println("DBG: - instance["+Saxon.xpath2string(config, "(nde:label)[1]", null, WikiData.NAMESPACES)+"]");
+            System.err.println("DBG: - instance["+Saxon.xpath2string(config, "(nde:label)[1]", null, WikiDataGTAAConcepts.NAMESPACES)+"]");
             System.err.println("DBG: - api["+api+"]");
             System.err.println("DBG: - conceptScheme["+cs+"]");
             System.err.println("DBG: - match["+match+"]");
-            // https://www.wikidata.org/w/api.php?action=wbsearchentities&search=andre%20van%20duin&format=json&language=en&type=item&continue=0
-            URL url = new URL(api + "/w/api.php?action=wbsearchentities&search="+  match + "&language=en&format=json&type=item&continue=0");//api+"/find-concepts?q=prefLabel:"+match+"&conceptScheme="+cs+"&fl=uri,prefLabel,altLabel");
+            // https://www.wikidata.org/w/api.php?action=wbsearchentities&search=andre%20van%20duin&format=json&language=en&type=item&continue=0&props=www.wikidata.org/wiki/Property:P1741
+            //TODO: proper URL escaping
+            URL url = new URL(api + "/w/api.php?action=wbsearchentities&search="+  match.replace(" ","%20") + "&language=en&format=json&type=item&continue=0");//api+"/find-concepts?q=prefLabel:"+match+"&conceptScheme="+cs+"&fl=uri,prefLabel,altLabel");
             System.err.println("DBG: = url["+url+"]");
             JSONObject termsObject = new JSONObject(jsonGetRequest(url));
             System.err.println("DBG: " + jsonGetRequest(url));
@@ -82,18 +84,39 @@ public class WikiData implements RecipeInterface {
 				TermDTO term = new TermDTO();
 				term.uri = new URI(termObject.getString("concepturi"));
 				
-				//TODO: retrieve the whole concept information from its URI and get all labels
+				
+				//TODO: try to get all the labels, not just the one returned by the query
 				term.prefLabel = new ArrayList<>();
 				term.prefLabel.add(termObject.getString("label"));
 				
 				term.altLabel = new ArrayList<>();
-				term.altLabel.add(termObject.getString("label"));
+				term.altLabel.add(termObject.getString("label"));				
+
 				
-				terms.add(term);
+				//check if is GTAA using prop=links
+	            URL linksUrl = new URL(api + "/w/api.php?action=parse&pageid="+  termObject.getInt("pageid") + "&format=json&prop=links");//api+"/find-concepts?q=prefLabel:"+match+"&conceptScheme="+cs+"&fl=uri,prefLabel,altLabel");
+	            System.err.println("DBG: Links URL" + linksUrl);
+	            JSONObject linksUrlObject = new JSONObject(jsonGetRequest(linksUrl));
+	            
+	            JSONObject parseObject = linksUrlObject.getJSONObject("parse");
+	            
+	            JSONArray linksArray = parseObject.getJSONArray("links");
+	            
+	            for (int j=0; j< linksArray.length();j++) 
+	            {	
+	            	JSONObject linkObject = linksArray.getJSONObject(j);
+	            	System.err.println("Processing link" +linkObject.getString("*"));
+	            	if(linkObject.getString("*").equals("Property:P1741"))
+	            	{
+	            		System.err.println("DBG: adding term");
+	    				terms.add(term);
+	            	}
+	            }
+				
 			}
 
         } catch (SaxonApiException | MalformedURLException  | URISyntaxException ex) {
-            Logger.getLogger(WikiData.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(WikiDataGTAAConcepts.class.getName()).log(Level.SEVERE, null, ex);
         }
         return terms;
     }
