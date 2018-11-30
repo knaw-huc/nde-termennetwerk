@@ -5,8 +5,18 @@
         <nde:api>https://clavas.clarin.eu/clavas/public/api</nde:api>
         <nde:conceptScheme>http://hdl.handle.net/11459/CLAVAS_810f8d2a-6723-3ba6-2e57-41d6d3844816</nde:conceptScheme>
     </nde:dataset>
+    <nde:dataset id="wikidata" recipe="nl.knaw.huc.di.nde.recipe.WikiData">
+        <nde:label xml:lang="nl">Wikidata: wikidata entities</nde:label>
+        <nde:api>https://www.wikidata.org</nde:api>
+        <nde:conceptScheme></nde:conceptScheme>
+    </nde:dataset>
+    <nde:dataset id="wikidatagtaa" recipe="nl.knaw.huc.di.nde.recipe.WikiDataGTAAConcepts">
+        <nde:label xml:lang="nl">Wikidata/GTAA: wikidata entities that are linked to the GTAA</nde:label>
+        <nde:api>https://www.wikidata.org</nde:api>
+        <nde:conceptScheme></nde:conceptScheme>
+    </nde:dataset>
     <nde:dataset id="gtaa" recipe="nl.knaw.huc.di.nde.recipe.OpenSKOS">
-        <nde:label xml:lang="nl">GTAA: Onderwerpen</nde:label>
+        <nde:label xml:lang="nl">GTAA Onderwerpen</nde:label>
         <nde:api>http://openskos.beeldengeluid.nl/api</nde:api>
         <nde:conceptScheme>http://data.beeldengeluid.nl/gtaa/Onderwerpen</nde:conceptScheme>
     </nde:dataset>
