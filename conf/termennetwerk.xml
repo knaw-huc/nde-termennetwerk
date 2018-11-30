@@ -10,4 +10,9 @@
         <nde:api>https://www.wikidata.org</nde:api>
         <nde:conceptScheme></nde:conceptScheme>
     </nde:dataset>
+    <nde:dataset id="gtaa" recipe="nl.knaw.huc.di.nde.recipe.OpenSKOS">
+        <nde:label xml:lang="nl">GTAA Onderwerpen</nde:label>
+        <nde:api>http://openskos.beeldengeluid.nl/api</nde:api>
+        <nde:conceptScheme>http://data.beeldengeluid.nl/gtaa/Onderwerpen</nde:conceptScheme>
+    </nde:dataset>
 </nde:NDE>
