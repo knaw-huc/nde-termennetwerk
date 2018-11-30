@@ -6,7 +6,7 @@ Pilot implementation for the [NDE Termennetwerk](https://docs.google.com/documen
 
 ```sh
 $ mvn build
-$ mvn "-Dexec.args=-Dexec.args=-Dnde.config=`pwd`/conf/termennetwerk.xml -classpath %classpath nl.knaw.huc.di.nde.Main" -Dexec.executable=java org.codehaus.mojo:exec-maven-plugin:1.5.0:exec
+$ mvn "-Dexec.args=-Dnde.config=`pwd`/conf/termennetwerk.xml -classpath %classpath nl.knaw.huc.di.nde.Main" -Dexec.executable=java org.codehaus.mojo:exec-maven-plugin:1.5.0:exec
 ```
 
 or via docker
