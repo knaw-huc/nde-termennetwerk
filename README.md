@@ -28,12 +28,12 @@ The GraphiQL endpoint is hardwired to the NDE Termennetwerk GraphQL endpoint and
 Example queries:
 
 ```graphql
-query { terms(match:"*Dutch*",dataset:["clavas"]) {uri, prefLabel} }
+query { terms(match:"*Dutch*",dataset:["clavas"]) { dataset terms {uri, prefLabel} } }
 ```
 
 ```graphql
 query {
-  terms(match:"*fietsen*" dataset:["gtaa"]) {uri prefLabel altLabel}
+  terms(match:"*fietsen*" dataset:["gtaa"]) { dataset terms {uri prefLabel altLabel} }
 }
 ```
 
@@ -55,7 +55,7 @@ query {
 or via curl:
 
 ```sh
-$ curl -XPOST -H 'Content-Type:application/graphql'  -d 'query { terms(match:"Abkhazian",dataset:["clavas"]) {uri, altLabel} }' http://localhost:8080/nde/graphql
+$ curl -XPOST -H 'Content-Type:application/graphql'  -d 'query { terms(match:"Abkhazian",dataset:["clavas"]) { dataset terms {uri, altLabel} } }' http://localhost:8080/nde/graphql
 ```
 
 ## TODO
