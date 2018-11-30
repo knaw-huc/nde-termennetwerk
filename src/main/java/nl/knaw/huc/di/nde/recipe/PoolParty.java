@@ -10,10 +10,12 @@ import nl.knaw.huc.di.nde.TermDTO;
 import nl.mpi.tla.util.Saxon;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,34 +23,38 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PoolParty implements RecipeInterface {
 
-  public static final Logger LOG = LoggerFactory.getLogger(PoolParty.class);
-  public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+  private static final Logger LOG = LoggerFactory.getLogger(PoolParty.class);
+  private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
   @Override
   public List<TermDTO> fetchMatchingTerms(XdmItem config, String match) {
 
     ArrayList<TermDTO> terms = Lists.newArrayList();
     try {
-      StringBuilder api = new StringBuilder(Saxon.xpath2string(config, "nde:api", null, OpenSKOS.NAMESPACES));
+      String api = Saxon.xpath2string(config, "nde:api", null, OpenSKOS.NAMESPACES);
       String query = Saxon.xpath2string(config, "nde:query", null, OpenSKOS.NAMESPACES);
 
       URLEncoder.encode(query, "UTF-8");
-      api.append("?format=application/json&query=").append(query.replace("${match}", match).trim());
+      query = URLDecoder.decode(query.replace("${match}", match).trim(), "UTF-8");
 
       CloseableHttpClient client = HttpClients.createDefault();
-      HttpGet httpGet = new HttpGet(api.toString());
-      CloseableHttpResponse httpResponse = client.execute(httpGet);
+      HttpPost post = new HttpPost(api);
+      ArrayList<BasicNameValuePair> parameters = Lists.newArrayList(
+        new BasicNameValuePair("format", "application/json"),
+        new BasicNameValuePair("query", query));
+      post.setEntity(new UrlEncodedFormEntity(parameters));
+      // HttpGet httpGet = new HttpGet(api.toString());
+      CloseableHttpResponse httpResponse = client.execute(post);
       String theString = entityToString(httpResponse.getEntity());
       // LOG.info("response {}", theString);
       JsonNode jsonNode = OBJECT_MAPPER.readTree(theString);
-      LOG.info("json results: {}", jsonNode.get("results"));
-      LOG.info("json bindings: {}", jsonNode.get("results").get("bindings"));
       ArrayNode results = (ArrayNode) jsonNode.get("results").get("bindings");
       results.iterator().forEachRemaining(res -> {
         TermDTO term = new TermDTO();
