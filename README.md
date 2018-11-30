@@ -1,6 +1,6 @@
 # NDE - Termennetwerk (pilot)
 
-Pilot implementation for the NDE Termennetwerk created for the CLARIAH Techdag November 30, 2018.
+Pilot implementation for the [NDE Termennetwerk](https://docs.google.com/document/d/11CLVYri6B1h4tHShhEmYYJB-y-bmS5cm3E5e7hZJLiQ/edit?usp=sharing) created for the [CLARIAH Techdag November 30, 2018](https://www.clariah.nl/evenementen/tech-dag-2-2018).
 
 ## Build & Start
 
