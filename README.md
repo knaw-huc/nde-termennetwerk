@@ -6,10 +6,10 @@ Pilot implementation for the [NDE Termennetwerk](https://docs.google.com/documen
 
 ```sh
 $ mvn build
-$ mvn "-Dexec.args=-Dexec.args=-Dnde.config=`pwd`/conf/termennetwerk.xml -classpath %classpath nl.knaw.huc.di.nde.Main" -Dexec.executable=java org.codehaus.mojo:exec-maven-plugin:1.5.0:exec
+$ mvn "-Dexec.args=-Dnde.config=`pwd`/conf/termennetwerk.xml -classpath %classpath nl.knaw.huc.di.nde.Main" -Dexec.executable=java org.codehaus.mojo:exec-maven-plugin:1.5.0:exec
 ```
 
-or via docker
+or via docker:
 
 ```sh
 $ docker build -t nde-termennetwerk .
@@ -23,16 +23,39 @@ $ docker run --rm -it -p 8080:8080 nde-termennetwerk
 
 ## Queries
 
-The GraphIQL endpoint is hardwired to the NDE Termennetwerk GraphQL endpoint and supports autocomplete.
+The GraphiQL endpoint is hardwired to the NDE Termennetwerk GraphQL endpoint and supports autocomplete.
 
-Example query:
+Example queries:
 
 ```graphql
-query { terms(match:"Abkhazian",dataset:"clavas") {uri, altLabel} }
+query { terms(match:"*Dutch*",dataset:["clavas"]) { dataset terms {uri, prefLabel} } }
 ```
 
+```graphql
+query {
+  terms(match:"*fietsen*" dataset:["gtaa"]) { dataset terms {uri prefLabel altLabel} }
+}
+```
+
+```graphql
+query {
+  terms(match:"*Dut*" dataset:["clavas","gtaa"] ) {
+    dataset
+    label
+    terms {
+      uri
+      prefLabel
+      altLabel
+      scopeNote
+    }
+  } 
+}
+```
+
+or via curl:
+
 ```sh
-$ curl -XPOST -H 'Content-Type:application/graphql'  -d 'query { terms(match:"Abkhazian",dataset:"clavas") {uri, altLabel} }' http://localhost:8080/nde/graphql
+$ curl -XPOST -H 'Content-Type:application/graphql'  -d 'query { terms(match:"Abkhazian",dataset:["clavas"]) { dataset terms {uri, altLabel} } }' http://localhost:8080/nde/graphql
 ```
 
 ## TODO
@@ -41,7 +64,7 @@ $ curl -XPOST -H 'Content-Type:application/graphql'  -d 'query { terms(match:"Ab
 * [x] example dataset recipe
 * [x] docker setup
 * [ ] keep the languages
-* [ ] query multiple datasets and merge the results
+* [x] query multiple datasets and merge the results
 * [ ] fuller support for the NDE API design
 * [ ] how to deal with different response times
 * [ ] use Dropwizard

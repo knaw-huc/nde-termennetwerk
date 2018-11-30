@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,18 +63,19 @@ public class Registry {
         SchemaParser schemaParser = new SchemaParser();
         TypeDefinitionRegistry typeRegistry = schemaParser.parse(this.schema);
         // fetching
-        DataFetcher termsDataFetcher = new DataFetcher<List<TermDTO>>() {
+        DataFetcher termsDataFetcher = new DataFetcher<List<DatasetDTO>>() {
             @Override
-            public List<TermDTO> get(DataFetchingEnvironment environment) {
+            public List<DatasetDTO> get(DataFetchingEnvironment environment) {
+                List<DatasetDTO> datasets = new ArrayList<DatasetDTO>();
                 List<TermDTO> terms = null;
                 String match = environment.getArgument("match");
-                String dataset = environment.getArgument("dataset");
-                if (match!=null && dataset!=null) {
-                    terms = fetchMatchingTerms(match,dataset);
-                } else {
-                    terms = new ArrayList<TermDTO>();
+                List<String> sets = environment.getArgument("dataset");
+                System.err.println("DBG: datasets["+sets+"]");
+                if (match!=null && sets!=null) {
+                    for (String set:sets)
+                        datasets.add(fetchMatchingTerms(match,set));
                 }
-                return terms;
+                return datasets;
             }
         };
         // wiring
@@ -84,8 +86,10 @@ public class Registry {
         builder = GraphQL.newGraphQL(schemaGenerator.makeExecutableSchema(typeRegistry, runtime));
     }
     
-    private List<TermDTO> fetchMatchingTerms(String match,String dataset) {        
-        List<TermDTO> res = new ArrayList<>();
+    private DatasetDTO fetchMatchingTerms(String match,String dataset) {
+        DatasetDTO res = new DatasetDTO();
+        res.dataset = dataset;
+        List<TermDTO> terms = new ArrayList<>();
         try {
             System.err.println("DBG: config["+System.getProperty("nde.config")+"]");
             System.err.println("DBG: match["+match+"]");
@@ -95,11 +99,15 @@ public class Registry {
             vars.put("dataset", new XdmAtomicValue(dataset));
             XdmItem dsConfig = Saxon.xpathSingle(config, "//nde:dataset[@id=$dataset]", vars, NAMESPACES);
             if (dsConfig != null) {
+                res.label = new ArrayList<>();
+                for (Iterator<XdmItem> lblIter = Saxon.xpathIterator(dsConfig, "nde:label",null, Registry.NAMESPACES); lblIter.hasNext();) {
+                    res.label.add(lblIter.next().getStringValue());
+                }
                 String recipe = Saxon.xpath2string(dsConfig, "@recipe", null, NAMESPACES);
                 if (!recipe.isEmpty()) {
                     Class<RecipeInterface> clazz = (Class<RecipeInterface>) Class.forName(recipe);
                     RecipeInterface recipeImpl = clazz.newInstance();
-                    res = recipeImpl.fetchMatchingTerms(dsConfig, match);
+                    terms = recipeImpl.fetchMatchingTerms(dsConfig, match);
                 } else
                     Logger.getLogger(Registry.class.getName()).log(Level.SEVERE,"Recipe of dataset["+dataset+"] is unknown!");
             } else
@@ -107,6 +115,7 @@ public class Registry {
         } catch (Exception ex) {
             Logger.getLogger(Registry.class.getName()).log(Level.SEVERE, null, ex);
         }
+        res.terms = terms;
         return res;
     }
     
