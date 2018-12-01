@@ -25,6 +25,7 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
+import nl.knaw.huc.di.nde.Registry;
 
 public class PoolParty implements RecipeInterface {
 
@@ -35,8 +36,9 @@ public class PoolParty implements RecipeInterface {
 
     ArrayList<TermDTO> terms = Lists.newArrayList();
     try {
-      String api = Saxon.xpath2string(config, "nde:api", null, OpenSKOS.NAMESPACES);
-      String query = Saxon.xpath2string(config, "nde:query", null, OpenSKOS.NAMESPACES);
+      String api = Saxon.xpath2string(config, "nde:api", null, Registry.NAMESPACES);
+      String query = Saxon.xpath2string(config, "nde:query", null, Registry.NAMESPACES);
+      String base = Saxon.xpath2string(config, "nde:base", null, Registry.NAMESPACES);
 
       URLEncoder.encode(query, "UTF-8");
       query = URLDecoder.decode(query.replace("${match}", match).trim(), "UTF-8");
@@ -48,8 +50,7 @@ public class PoolParty implements RecipeInterface {
       post.setEntity(new UrlEncodedFormEntity(parameters));
       CloseableHttpResponse httpResponse = client.execute(post);
 
-      Model model = Rio.parse(httpResponse.getEntity().getContent(), "https://data.cultureelerfgoed.nl/term/id/cht/",
-        RDFFormat.RDFXML);
+      Model model = Rio.parse(httpResponse.getEntity().getContent(), base, RDFFormat.RDFXML);
       String subject = null;
       TermDTO term = null;
       for (Statement statement : model) {
@@ -80,7 +81,6 @@ public class PoolParty implements RecipeInterface {
     } catch (IOException | SaxonApiException | URISyntaxException e) {
       LOG.error("Request failed: ", e);
     }
-
 
     return terms;
   }

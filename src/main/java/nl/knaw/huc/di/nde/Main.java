@@ -97,7 +97,7 @@ public class Main {
             String extension = uri.substring(pos + 1);
             String mediaType = EXTENSION_TO_MEDIA_TYPE.get(extension);
 
-            if (!uri.equals("/") && ( uri.contains("..") || mediaType == null) ) {
+            if (!uri.endsWith("/") && ( uri.contains("..") || mediaType == null) ) {
                 response.sendError(HttpStatus.NOT_FOUND_404.getStatusCode());
                 return;
             }
@@ -112,7 +112,7 @@ public class Main {
                 uri = uri.substring(resourcesContextPath.length());
             }
 
-            uri = uri.equals("/") ? uri.concat("index.html") : uri;
+            uri = uri.endsWith("/") ? uri.concat("index.html") : uri;
             System.out.println(uri);
             InputStream fileStream;
 

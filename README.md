@@ -39,13 +39,14 @@ query {
 
 ```graphql
 query {
-  terms(match:"*Dut*" dataset:["clavas","gtaa"] ) {
+  terms(match:"fietsen" dataset:["cht","gtaa","wikidata"] ) {
     dataset
     label
     terms {
       uri
       prefLabel
       altLabel
+      definition
       scopeNote
     }
   } 

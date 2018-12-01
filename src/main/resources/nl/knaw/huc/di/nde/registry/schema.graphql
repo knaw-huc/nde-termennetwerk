@@ -9,7 +9,7 @@ type Dataset {
 }
 
 type Term {
-  uri: String
+  uri: String!
   prefLabel: [String]
   altLabel: [String]
   scopeNote: [String]

@@ -48,19 +48,15 @@ public class OpenSKOS implements RecipeInterface {
                 XdmItem item = iter.next();
                 TermDTO term = new TermDTO();
                 term.uri = new URI(Saxon.xpath2string(item, "@rdf:about", null, OpenSKOS.NAMESPACES));
-                term.prefLabel = new ArrayList<>();
                 for (Iterator<XdmItem> lblIter = Saxon.xpathIterator(item, "skos:prefLabel",null, OpenSKOS.NAMESPACES); lblIter.hasNext();) {
                     term.prefLabel.add(lblIter.next().getStringValue());
                 }
-                term.altLabel = new ArrayList<>();
                 for (Iterator<XdmItem> lblIter = Saxon.xpathIterator(item, "skos:altLabel",null, OpenSKOS.NAMESPACES); lblIter.hasNext();) {
                     term.altLabel.add(lblIter.next().getStringValue());
                 }
-                term.definition = new ArrayList<>();
                 for (Iterator<XdmItem> lblIter = Saxon.xpathIterator(item, "skos:definition",null, OpenSKOS.NAMESPACES); lblIter.hasNext();) {
                     term.definition.add(lblIter.next().getStringValue());
                 }
-                term.scopeNote = new ArrayList<>();
                 for (Iterator<XdmItem> lblIter = Saxon.xpathIterator(item, "skos:scopeNote",null, OpenSKOS.NAMESPACES); lblIter.hasNext();) {
                     term.scopeNote.add(lblIter.next().getStringValue());
                 }
