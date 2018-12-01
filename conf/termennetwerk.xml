@@ -20,7 +20,7 @@
         <nde:api>http://openskos.beeldengeluid.nl/api</nde:api>
         <nde:conceptScheme>http://data.beeldengeluid.nl/gtaa/Onderwerpen</nde:conceptScheme>
     </nde:dataset>
-  <nde:dataset id="poolparty" recipe="nl.knaw.huc.di.nde.recipe.PoolParty">
+  <nde:dataset id="cht" recipe="nl.knaw.huc.di.nde.recipe.PoolParty">
     <nde:api>https://data.cultureelerfgoed.nl/PoolParty/sparql/term/id/cht</nde:api>
     <nde:query>
       PREFIX%20skos%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2004%2F02%2Fskos%2Fcore%23%3E%0ACONSTRUCT%20%7B%0A%20%20%3Furi%20a%20skos%3AConcept%20%3B%0A%20%20%20%20%20%20%20%20%20skos%3AprefLabel%20%3FprefLabel%20%3B%0A%20%20%20%20%20%20%20%20%20skos%3AaltLabel%20%3FaltLabel%20%3B%0A%20%20%20%20%20%20%20%20%20skos%3AhiddenLabel%20%3FhiddenLabel%20%3B%0A%20%20%20%20%20%20%20%20%20skos%3AscopeNote%20%3FscopeNote%20.%0A%7D%0AWHERE%20%7B%0A%20%20%3Furi%20skos%3AprefLabel%20%3FprefLabel%20.%0A%20%20FILTER%20%28LANG%28%3FprefLabel%29%20%3D%20%22nl%22%29%20.%0A%20%20FILTER%20%28CONTAINS%28LCASE%28%3FprefLabel%29%2C%20LCASE%28%22${match}%22%29%29%29%0A%20%20OPTIONAL%20%7B%0A%20%20%20%20%20%3Furi%20skos%3AaltLabel%20%3FaltLabel%20.%0A%20%20%20%20%20%3Furi%20skos%3AhiddenLabel%20%3FhiddenLabel%20.%0A%20%20%20%20%20%3Furi%20skos%3AscopeNote%20%3FscopeNote%20.%0A%20%20%7D%0A%7D%0ALIMIT%201000%0A
