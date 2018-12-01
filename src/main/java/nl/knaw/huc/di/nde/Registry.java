@@ -89,7 +89,6 @@ public class Registry {
     private DatasetDTO fetchMatchingTerms(String match,String dataset) {
         DatasetDTO res = new DatasetDTO();
         res.dataset = dataset;
-        List<TermDTO> terms = new ArrayList<>();
         try {
             System.err.println("DBG: config["+System.getProperty("nde.config")+"]");
             System.err.println("DBG: match["+match+"]");
@@ -99,7 +98,6 @@ public class Registry {
             vars.put("dataset", new XdmAtomicValue(dataset));
             XdmItem dsConfig = Saxon.xpathSingle(config, "//nde:dataset[@id=$dataset]", vars, NAMESPACES);
             if (dsConfig != null) {
-                res.label = new ArrayList<>();
                 for (Iterator<XdmItem> lblIter = Saxon.xpathIterator(dsConfig, "nde:label",null, Registry.NAMESPACES); lblIter.hasNext();) {
                     res.label.add(lblIter.next().getStringValue());
                 }
@@ -107,7 +105,7 @@ public class Registry {
                 if (!recipe.isEmpty()) {
                     Class<RecipeInterface> clazz = (Class<RecipeInterface>) Class.forName(recipe);
                     RecipeInterface recipeImpl = clazz.newInstance();
-                    terms = recipeImpl.fetchMatchingTerms(dsConfig, match);
+                    res.terms = recipeImpl.fetchMatchingTerms(dsConfig, match);
                 } else
                     Logger.getLogger(Registry.class.getName()).log(Level.SEVERE,"Recipe of dataset["+dataset+"] is unknown!");
             } else
@@ -115,7 +113,6 @@ public class Registry {
         } catch (Exception ex) {
             Logger.getLogger(Registry.class.getName()).log(Level.SEVERE, null, ex);
         }
-        res.terms = terms;
         return res;
     }
     
