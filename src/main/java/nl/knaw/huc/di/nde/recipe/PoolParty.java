@@ -34,6 +34,11 @@ public class PoolParty implements RecipeInterface {
   @Override
   public List<TermDTO> fetchMatchingTerms(XdmItem config, String match) {
 
+    // Optional debugging settings for serious problems... 
+    //System.setProperty("org.apache.commons.logging.Log","org.apache.commons.logging.impl.SimpleLog");
+    //System.setProperty("org.apache.commons.logging.simplelog.showdatetime", "true");
+    //System.setProperty("org.apache.commons.logging.simplelog.log.org.apache.http.wire", "DEBUG");
+
     ArrayList<TermDTO> terms = Lists.newArrayList();
     try {
       String api = Saxon.xpath2string(config, "nde:api", null, Registry.NAMESPACES);
@@ -41,10 +46,21 @@ public class PoolParty implements RecipeInterface {
       String base = Saxon.xpath2string(config, "nde:base", null, Registry.NAMESPACES);
 
       URLEncoder.encode(query, "UTF-8");
+
+      // remove '*' this currently doesn't work for sparql queries 
+      match = match.replaceAll("\\*","");
+
       query = URLDecoder.decode(query.replace("${match}", match).trim(), "UTF-8");
+
+      // print out the query that is executed on the sparql endpoint
+      System.err.println("DBG: query "+query);
 
       CloseableHttpClient client = HttpClients.createDefault();
       HttpPost post = new HttpPost(api);
+
+      // force sparql endpoint to talk RDF/XML 
+      post.setHeader("Accept", "application/rdf+xml");
+      
       ArrayList<BasicNameValuePair> parameters = Lists.newArrayList(
         new BasicNameValuePair("query", query));
       post.setEntity(new UrlEncodedFormEntity(parameters));
