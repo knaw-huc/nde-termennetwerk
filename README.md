@@ -39,7 +39,7 @@ query {
 
 ```graphql
 query {
-  terms(match:"fietsen" dataset:["cht","gtaa","wikidata"] ) {
+  terms(match:"Rembrandt" dataset:["cht","gtaa","nta","wikidata"] ) {
     dataset
     label
     terms {
