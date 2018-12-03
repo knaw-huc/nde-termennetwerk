@@ -33,6 +33,7 @@ public class WikiDataGTAAConcepts implements RecipeInterface {
     static {
         NAMESPACES.putAll(Registry.NAMESPACES);
         NAMESPACES.put("wikidata", "https://www.wikidata.org/wiki/");
+        NAMESPACES.put("gtaa", "http://data.beeldengeluid.nl/gtaa/");
     };
     
     private static String streamToString(InputStream inputStream) {
@@ -82,7 +83,6 @@ public class WikiDataGTAAConcepts implements RecipeInterface {
 			{
 				JSONObject termObject = termsArray.getJSONObject(i);
 				TermDTO term = new TermDTO();
-				term.uri = new URI(termObject.getString("concepturi"));
 				
 				
 				//TODO: try to get all the labels, not just the one returned by the query
@@ -93,24 +93,25 @@ public class WikiDataGTAAConcepts implements RecipeInterface {
 				term.altLabel.add(termObject.getString("label"));				
 
 				
-				//check if is GTAA using prop=links
-	            URL linksUrl = new URL(api + "/w/api.php?action=parse&pageid="+  termObject.getInt("pageid") + "&format=json&prop=links");//api+"/find-concepts?q=prefLabel:"+match+"&conceptScheme="+cs+"&fl=uri,prefLabel,altLabel");
-	            System.err.println("DBG: Links URL" + linksUrl);
-	            JSONObject linksUrlObject = new JSONObject(jsonGetRequest(linksUrl));
+				//check if is GTAA and get the other labels via wbgetclaims
+				//https://www.wikidata.org/w/api.php?action=wbgetclaims&format=json&props=value&entity=Q523644
+	            URL claimsUrl = new URL(api + "/w/api.php?action=wbgetclaims&entity="+  termObject.getString("id") + "&format=json&props=values");//api+"/find-concepts?q=prefLabel:"+match+"&conceptScheme="+cs+"&fl=uri,prefLabel,altLabel");
+	            System.err.println("DBG: Claims URL " + claimsUrl);
+	            JSONObject claimsUrlObject = new JSONObject(jsonGetRequest(claimsUrl));
 	            
-	            JSONObject parseObject = linksUrlObject.getJSONObject("parse");
-	            
-	            JSONArray linksArray = parseObject.getJSONArray("links");
-	            
-	            for (int j=0; j< linksArray.length();j++) 
-	            {	
-	            	JSONObject linkObject = linksArray.getJSONObject(j);
-	            	System.err.println("Processing link" +linkObject.getString("*"));
-	            	if(linkObject.getString("*").equals("Property:P1741"))
-	            	{
-	            		System.err.println("DBG: adding term");
-	    				terms.add(term);
-	            	}
+	            JSONObject claimsObject = claimsUrlObject.getJSONObject("claims");
+	            if(claimsObject.has("P1741")) // if item is linked to GTAA
+	            {
+	            	JSONArray gtaaArray = claimsObject.getJSONArray("P1741");
+	            	//assume only one match, this should be otherwise we have a data issue in the GTAA
+	            	JSONObject gtaaInfo = gtaaArray.getJSONObject(0);
+	            	JSONObject gtaaElement = gtaaInfo.getJSONObject("mainsnak");
+	            	JSONObject gtaaValue = gtaaElement.getJSONObject("datavalue");
+					term.uri = new URI(WikiDataGTAAConcepts.NAMESPACES.get("gtaa") + gtaaValue.getString("value"));
+					System.err.println("DBG: GTAA URI " + term.uri);
+            		terms.add(term);
+
+	            	//TODO: get the labels - can this via claims or are they not there?
 	            }
 				
 			}
