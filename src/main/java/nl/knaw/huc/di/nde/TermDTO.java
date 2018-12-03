@@ -1,12 +1,14 @@
 package nl.knaw.huc.di.nde;
 
+import com.google.common.collect.Lists;
+
 import java.net.URI;
 import java.util.List;
 
 public class TermDTO {
-    public URI uri;
-    public List<String> prefLabel;
-    public List<String> altLabel;
-    public List<String> scopeNote;
-    public List<String> definition;
- }
+  public URI uri;
+  public List<String> prefLabel = Lists.newArrayList();
+  public List<String> altLabel = Lists.newArrayList();
+  public List<String> scopeNote = Lists.newArrayList();
+  public List<String> definition = Lists.newArrayList();
+}

@@ -41,7 +41,7 @@ public class OpenSKOS implements RecipeInterface {
             System.err.println("DBG: - conceptScheme["+cs+"]");
             System.err.println("DBG: - match["+match+"]");
             // https://clavas.clarin.eu/clavas/public/api/find-concepts?q=prefLabel:*&conceptScheme=http://hdl.handle.net/11459/CLAVAS_810f8d2a-6723-3ba6-2e57-41d6d3844816&fl=uri,prefLabel&rows=100
-            URL url = new URL(api+"/find-concepts?q=prefLabel:"+match+"&conceptScheme="+cs+"&fl=uri,prefLabel,altLabel");
+            URL url = new URL(api+"/find-concepts?q=prefLabel:"+match+"&conceptScheme="+cs);//+"&fl=uri,prefLabel,altLabel"
             System.err.println("DBG: = url["+url+"]");
             XdmNode res = Saxon.buildDocument(new StreamSource(url.toString()));
             for (Iterator<XdmItem> iter = Saxon.xpathIterator(res, "/rdf:RDF/rdf:Description",null, OpenSKOS.NAMESPACES); iter.hasNext();) {
@@ -55,6 +55,14 @@ public class OpenSKOS implements RecipeInterface {
                 term.altLabel = new ArrayList<>();
                 for (Iterator<XdmItem> lblIter = Saxon.xpathIterator(item, "skos:altLabel",null, OpenSKOS.NAMESPACES); lblIter.hasNext();) {
                     term.altLabel.add(lblIter.next().getStringValue());
+                }
+                term.definition = new ArrayList<>();
+                for (Iterator<XdmItem> lblIter = Saxon.xpathIterator(item, "skos:definition",null, OpenSKOS.NAMESPACES); lblIter.hasNext();) {
+                    term.definition.add(lblIter.next().getStringValue());
+                }
+                term.scopeNote = new ArrayList<>();
+                for (Iterator<XdmItem> lblIter = Saxon.xpathIterator(item, "skos:scopeNote",null, OpenSKOS.NAMESPACES); lblIter.hasNext();) {
+                    term.scopeNote.add(lblIter.next().getStringValue());
                 }
                 terms.add(term);
             }

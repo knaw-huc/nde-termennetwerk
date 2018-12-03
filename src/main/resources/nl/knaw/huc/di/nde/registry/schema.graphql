@@ -1,5 +1,11 @@
 type Query {
-  terms(match : String!, dataset : ID!) : [Term]
+  terms(match : String!, dataset : [String!]!) : [Dataset]
+}
+
+type Dataset {
+  dataset: ID!
+  label: [String]
+  terms: [Term]
 }
 
 type Term {
