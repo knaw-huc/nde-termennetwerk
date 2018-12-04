@@ -27,9 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 import nl.knaw.huc.di.nde.Registry;
 
-public class PoolParty implements RecipeInterface {
+public class SparqlEndpoint implements RecipeInterface {
 
-  private static final Logger LOG = LoggerFactory.getLogger(PoolParty.class);
+  private static final Logger LOG = LoggerFactory.getLogger(SparqlEndpoint.class);
 
   @Override
   public List<TermDTO> fetchMatchingTerms(XdmItem config, String match) {

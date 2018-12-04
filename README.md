@@ -32,30 +32,35 @@ query { terms(match:"*Dutch*",dataset:["clavas"]) { dataset terms {uri, prefLabe
 ```
 
 ```graphql
+# Example: Gemeenschappelijke Thesaurus Audiovisuele Archieven (GTAA) en Wikidata 
 query {
-  terms(match:"*fietsen*" dataset:["gtaa"]) { dataset terms {uri prefLabel altLabel} }
+  terms(match:"*fietsen*" dataset:["gtaa","wikidata"]) { dataset terms {uri prefLabel altLabel} }
 }
 ```
 
 ```graphql
+# Example: Nederlandse Thesaurus van Auteursnamen (NTA)
 query {
-  terms(match:"Rembrandt" dataset:["cht","gtaa","nta","wikidata"] ) {
-    dataset
-    label
-    terms {
-      uri
-      prefLabel
-      altLabel
-      definition
-      scopeNote
-    }
+  terms(match:"wolkers" dataset:["nta"] ) {
+    dataset label terms { uri prefLabel altLabel definition scopeNote } 
   }
 }
 ```
 
 ```graphql
+# Example: Cultuurhistorische Thesaurus (CHT) en Volkenkundige Thesaurus (SVCN)
 query {
-  terms(match:"amerika" dataset:["cht","svcn"]) { dataset terms {uri prefLabel altLabel scopeNote} }
+  terms(match:"amerika" dataset:["cht","svcn"]) { 
+    dataset terms {uri prefLabel altLabel scopeNote} 
+  }
+}
+```
+```graphql
+# Example: WO2 Thesaurus
+query {
+  terms(match:"bezetting" dataset:["wo2"] ) {
+    dataset label terms { uri prefLabel altLabel definition scopeNote } 
+  }
 }
 ```
 
