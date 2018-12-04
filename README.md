@@ -49,7 +49,13 @@ query {
       definition
       scopeNote
     }
-  } 
+  }
+}
+```
+
+```graphql
+query {
+  terms(match:"amerika" dataset:["cht","svcn"]) { dataset terms {uri prefLabel altLabel scopeNote} }
 }
 ```
 
