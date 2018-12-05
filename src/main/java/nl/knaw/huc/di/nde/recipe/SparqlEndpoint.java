@@ -45,10 +45,17 @@ public class SparqlEndpoint implements RecipeInterface {
       String query = Saxon.xpath2string(config, "nde:query", null, Registry.NAMESPACES);
       String base = Saxon.xpath2string(config, "nde:base", null, Registry.NAMESPACES);
 
+      // see if api supports the use of '*'; should be boolean instead of string
+      String wildcard = Saxon.xpath2string(config, "nde:wildcard",null, Registry.NAMESPACES);
+
+      System.err.println("DBG: wildcard support "+wildcard);
+
       URLEncoder.encode(query, "UTF-8");
 
-      // remove '*' this currently doesn't work for sparql queries 
-      match = match.replaceAll("\\*","");
+      // remove '*' if wildcards are not supported
+      if ( wildcard.equals("no") ) {
+         match = match.replaceAll("\\*","");
+      }
 
       query = URLDecoder.decode(query.replace("${match}", match).trim(), "UTF-8");
 
