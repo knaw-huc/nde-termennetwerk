@@ -63,6 +63,14 @@ query {
   }
 }
 ```
+```graphql
+# Example: AAT Thesaurus
+query {
+  terms(match:"wiel*" dataset:["aat"] ) {
+    dataset label terms { uri prefLabel altLabel definition scopeNote } 
+  }
+}
+```
 
 or via curl:
 
