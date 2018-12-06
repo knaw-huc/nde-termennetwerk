@@ -23,11 +23,13 @@
         <nde:api>https://data.cultureelerfgoed.nl/PoolParty/sparql/term/id/cht</nde:api>
         <nde:base>https://data.cultureelerfgoed.nl/term/id/cht/</nde:base>
         <nde:query>PREFIX%20skos%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2004%2F02%2Fskos%2Fcore%23%3E%0ACONSTRUCT%20%7B%0A%20%3Furi%20a%20skos%3AConcept%20%3B%0A%20%20%20%20skos%3AprefLabel%20%3FprefLabel%20%3B%0A%20%20%20%20skos%3AaltLabel%20%3FaltLabel%20%3B%0A%20%20%20%20skos%3AhiddenLabel%20%3FhiddenLabel%20%3B%0A%20%20%20%20skos%3AscopeNote%20%3FscopeNote%20.%0A%7D%0AWHERE%20%7B%0A%20%20%3Furi%20skos%3AprefLabel%20%3FprefLabel%20.%0A%20%20FILTER%20%28LANG%28%3FprefLabel%29%20%3D%20%22nl%22%29%20.%0A%20%20FILTER%20%28CONTAINS%28LCASE%28%3FprefLabel%29%2C%20LCASE%28%22${match}%22%29%29%29%0A%20%20OPTIONAL%20%7B%20%3Furi%20skos%3AaltLabel%20%3FaltLabel%20.%20%7D%0A%20%20OPTIONAL%20%7B%20%3Furi%20skos%3AhiddenLabel%20%3FhiddenLabel%20.%20%7D%0A%20%20OPTIONAL%20%7B%20%3Furi%20skos%3AscopeNote%20%3FscopeNote%20.%20%7D%0A%7D%0ALIMIT%201000</nde:query>
+         <nde:wildcard>no</nde:wildcard>
     </nde:dataset>
     <nde:dataset id="nta" recipe="nl.knaw.huc.di.nde.recipe.SparqlEndpoint">
         <nde:label xml:lang="nl">KB: Nederlandse Thesaurus voor Auteursnamen</nde:label>
         <nde:api>http://data.bibliotheken.nl/sparql</nde:api>
         <nde:base>http://data.bibliotheken.nl/id/thes/</nde:base>
+        <nde:wildcard>no</nde:wildcard>
         <nde:query>CONSTRUCT%20%7B%20%3Furi%20a%20skos%3AConcept%20%3B%20skos%3AprefLabel%20%3FprefLabel%20%3B%20skos%3AaltLabel%20%3FaltLabel%20%7D%0AWHERE%20%7B%20graph%20%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fthesp%2F%3E%20%7B%20%7B%20%0A%3Furi%20rdfs%3Alabel%20%3FprefLabel%20.%0AFILTER%28CONTAINS%28lcase%28%3FprefLabel%29%2Clcase%28%22${match}%22%29%29%29%0AOPTIONAL%20%7B%20%3Furi%20schema%3AalternateName%20%3FaltLabel%20%7D%0A%7D%20UNION%20%7B%0A%3Furi%20schema%3AalternateName%20%3Flabel%20.%0AFILTER%28CONTAINS%28lcase%28%3Flabel%29%2Clcase%28%22${match}%22%29%29%29%20%0A%3Furi%20schema%3Aname%20%3FprefLabel%20.%0AOPTIONAL%20%7B%20%3Furi%20schema%3AalternateName%20%3FaltLabel%20%7D%7D%7D%7D%0ALIMIT%20100</nde:query>
     </nde:dataset>
     <nde:dataset id="svcn" recipe="nl.knaw.huc.di.nde.recipe.SparqlEndpoint">
@@ -35,11 +37,19 @@
         <nde:api>https://digitaalerfgoed.poolparty.biz/PoolParty/sparql/svcn</nde:api>
         <nde:base>https://digitaalerfgoed.poolparty.biz/svcn/</nde:base>
         <nde:query>PREFIX%20skos%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2004%2F02%2Fskos%2Fcore%23%3E%0ACONSTRUCT%20%7B%0A%20%20%3Furi%20a%20skos%3AConcept%20%3B%0A%20%20%20%20%20%20%20%20%20skos%3AprefLabel%20%3FprefLabel%20%3B%0A%20%20%20%20%20%20%20%20%20skos%3AaltLabel%20%3FaltLabel%20%3B%0A%20%20%20%20%20%20%20%20%20skos%3AhiddenLabel%20%3FhiddenLabel%20%3B%0A%20%20%20%20%20%20%20%20%20skos%3AscopeNote%20%3FscopeNote%20.%0A%7D%0AWHERE%20%7B%0A%20%20%3Furi%20skos%3AprefLabel%20%3FprefLabel%20.%0A%20%20FILTER%20%28LANG%28%3FprefLabel%29%20%3D%20%22nl%22%29%20.%0A%20%20FILTER%20%28CONTAINS%28LCASE%28%3FprefLabel%29%2C%20LCASE%28%22${match}%22%29%29%29%0A%20%20OPTIONAL%20%7B%20%3Furi%20skos%3AscopeNote%20%3FscopeNote%20.%20%7D%0A%20%20OPTIONAL%20%7B%20%3Furi%20skos%3AaltLabel%20%3FaltLabel%20.%20%7D%0A%20%20OPTIONAL%20%7B%20%3Furi%20skos%3AhiddenLabel%20%3FhiddenLabel%20.%20%7D%0A%7D%0ALIMIT%201000</nde:query>
+        <nde:wildcard>no</nde:wildcard>
     </nde:dataset>
     <nde:dataset id="wo2" recipe="nl.knaw.huc.di.nde.recipe.SparqlEndpoint">
         <nde:label xml:lang="nl">WO2 Thesaurus</nde:label>
         <nde:api>https://data.niod.nl/PoolParty/sparql/WO2_Thesaurus</nde:api>
         <nde:base>https://data.niod.nl/WO2_Thesaurus/</nde:base>
         <nde:query>PREFIX%20skos%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2004%2F02%2Fskos%2Fcore%23%3E%0ACONSTRUCT%20%7B%0A%20%20%3Furi%20a%20skos%3AConcept%20%3B%0A%20%20%20%20%20%20%20%20%20skos%3AprefLabel%20%3FprefLabel%20%3B%0A%20%20%20%20%20%20%20%20%20skos%3AaltLabel%20%3FaltLabel%20%3B%0A%20%20%20%20%20%20%20%20%20skos%3AhiddenLabel%20%3FhiddenLabel%20%3B%0A%20%20%20%20%20%20%20%20%20skos%3AscopeNote%20%3FscopeNote%20.%0A%7D%0AWHERE%20%7B%0A%20%20%3Furi%20skos%3AprefLabel%20%3FprefLabel%20%0A%20%20FILTER%20%28LANG%28%3FprefLabel%29%20%3D%20%22nl%22%29%20%0A%20%20FILTER%20%28CONTAINS%28LCASE%28%3FprefLabel%29%2C%20LCASE%28%22${match}%22%29%29%29%0A%20%20OPTIONAL%20%7B%20%3Furi%20skos%3AscopeNote%20%3FscopeNote%20%7D%0A%20%20OPTIONAL%20%7B%20%3Furi%20skos%3AaltLabel%20%3FaltLabel%20%7D%0A%20%20OPTIONAL%20%7B%20%3Furi%20skos%3AhiddenLabel%20%3FhiddenLabel%20%7D%0A%7D%0ALIMIT%201000</nde:query>
+        <nde:wildcard>no</nde:wildcard>
+    </nde:dataset>
+    <nde:dataset id="aat" recipe="nl.knaw.huc.di.nde.recipe.SparqlEndpoint">
+        <nde:label xml:lang="nl">Arts and Architecture Thesaurus (NL)WO2</nde:label>
+        <nde:api>http://vocab.getty.edu/sparql</nde:api>
+        <nde:base>http://vocab.getty.edu/aat/</nde:base>
+        <nde:query>PREFIX%20skos%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2004%2F02%2Fskos%2Fcore%23%3E%0APREFIX%20rdf%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F1999%2F02%2F22-rdf-syntax-ns%23%3E%0APREFIX%20aat%3A%20%3Chttp%3A%2F%2Fvocab.getty.edu%2Faat%2F%3E%0APREFIX%20dcterms%3A%20%3Chttp%3A%2F%2Fpurl.org%2Fdc%2Fterms%2F%3E%0APREFIX%20skosxl%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2008%2F05%2Fskos-xl%23%3E%0APREFIX%20gvp%3A%20%3Chttp%3A%2F%2Fvocab.getty.edu%2Fontology%23%3E%0APREFIX%20rdfs%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2000%2F01%2Frdf-schema%23%3E%0APREFIX%20luc%3A%20%3Chttp%3A%2F%2Fwww.ontotext.com%2Fowlim%2Flucene%23%3E%0ACONSTRUCT%20%7B%0A%3Furi%20skos%3AprefLabel%20%3FprefLabel%20.%0A%3Furi%20skos%3AaltLabel%20%3FaltLabel%20%20.%0A%3Furi%20skos%3AscopeNote%20%3FscopeNote%20.%0A%7D%0AWHERE%20%20%7B%0A%3Furi%20luc%3Aterm%20%22${match}%22%3B%20a%20%3Ftyp.%0A%3Ftyp%20rdfs%3AsubClassOf%20gvp%3ASubject%20.%0AFILTER%20%28%3Ftyp%20%21%3D%20gvp%3ASubject%29%20.%0A%3Furi%20skosxl%3AprefLabel%20%3FmainLabel%20.%0A%3FmainLabel%20dcterms%3Alanguage%20aat%3A300388256%20.%0A%3FmainLabel%20skosxl%3AliteralForm%20%3FprefLabel%20.%0AOPTIONAL%20%7B%0A%20%3Furi%20skosxl%3AaltLabel%20%3FsubLabel%20.%0A%20%3FsubLabel%20dcterms%3Alanguage%20aat%3A300388256%20.%0A%20%3FsubLabel%20skosxl%3AliteralForm%20%3FaltLabel%20.%0A%20%20%7D%0A%3Furi%20skos%3AscopeNote%20%3Fsn%20.%0A%3Fsn%20dcterms%3Alanguage%20aat%3A300388256%20.%0A%3Fsn%20rdf%3Avalue%20%3FscopeNote%20.%0A%7D</nde:query>
     </nde:dataset>
 </nde:NDE>
