@@ -8,6 +8,7 @@
     <nde:dataset id="wikidata" recipe="nl.knaw.huc.di.nde.recipe.WikiData">
         <nde:label xml:lang="nl">Wikidata: wikidata entities</nde:label>
         <nde:api>https://www.wikidata.org</nde:api>
+        <nde:wildcard>no</nde:wildcard>
     </nde:dataset>
     <nde:dataset id="wikidatagtaa" recipe="nl.knaw.huc.di.nde.recipe.WikiDataGTAAConcepts">
         <nde:label xml:lang="nl">Wikidata/GTAA: wikidata entities that are linked to the GTAA</nde:label>
@@ -29,8 +30,7 @@
         <nde:label xml:lang="nl">KB: Nederlandse Thesaurus voor Auteursnamen</nde:label>
         <nde:api>http://data.bibliotheken.nl/sparql</nde:api>
         <nde:base>http://data.bibliotheken.nl/id/thes/</nde:base>
-        <nde:wildcard>no</nde:wildcard>
-        <nde:query>CONSTRUCT%20%7B%20%3Furi%20a%20skos%3AConcept%20%3B%20skos%3AprefLabel%20%3FprefLabel%20%3B%20skos%3AaltLabel%20%3FaltLabel%20%7D%0AWHERE%20%7B%20graph%20%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fthesp%2F%3E%20%7B%20%7B%20%0A%3Furi%20rdfs%3Alabel%20%3FprefLabel%20.%0AFILTER%28CONTAINS%28lcase%28%3FprefLabel%29%2Clcase%28%22${match}%22%29%29%29%0AOPTIONAL%20%7B%20%3Furi%20schema%3AalternateName%20%3FaltLabel%20%7D%0A%7D%20UNION%20%7B%0A%3Furi%20schema%3AalternateName%20%3Flabel%20.%0AFILTER%28CONTAINS%28lcase%28%3Flabel%29%2Clcase%28%22${match}%22%29%29%29%20%0A%3Furi%20schema%3Aname%20%3FprefLabel%20.%0AOPTIONAL%20%7B%20%3Furi%20schema%3AalternateName%20%3FaltLabel%20%7D%7D%7D%7D%0ALIMIT%20100</nde:query>
+        <nde:query>CONSTRUCT%20%7B%20%3Furi%20a%20skos%3AConcept%20%3B%20skos%3AprefLabel%20%3FprefLabel%20%3B%20skos%3AaltLabel%20%3FaltLabel%20%3B%20skos%3AscopeNote%20%3FscopeNote%20%7D%0AWHERE%20%7B%20graph%20%3Chttp%3A%2F%2Fdata.bibliotheken.nl%2Fthesp%2F%3E%20%7B%20%0A%7B%20%0A%3Furi%20rdfs%3Alabel%20%3Flabel%20.%0A%3Flabel%20bif%3Acontains%20%22%27${match}%27%22%20%20.%0A%7D%20UNION%20%7B%0A%3Furi%20schema%3AalternateName%20%3Flabel%20.%0A%3Flabel%20bif%3Acontains%20%22%27${match}%27%22%20.%20%20%0A%7D%20UNION%20%7B%0A%3Furi%20schema%3Aname%20%3Flabel%20.%0A%3Flabel%20bif%3Acontains%20%22%27${match}%27%22%20.%0A%7D%0AOPTIONAL%20%7B%20%3Furi%20rdfs%3Alabel%20%3FprefLabel%20%7D%0AOPTIONAL%20%7B%20%3Furi%20rdfs%3Acomment%20%3FscopeNote%20%7D%0AOPTIONAL%20%7B%20%3Furi%20schema%3AalternateName%7Cschema%3Aname%20%3FaltLabel%20%7D%0A%7D%7D%0ALIMIT%201000</nde:query>
     </nde:dataset>
     <nde:dataset id="svcn" recipe="nl.knaw.huc.di.nde.recipe.SparqlEndpoint">
         <nde:label xml:lang="nl">SVCN: Volkenkundige Thesaurus</nde:label>

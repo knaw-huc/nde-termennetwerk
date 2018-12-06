@@ -18,8 +18,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Scanner;
 import org.json.*;
+
 
 public class WikiData implements RecipeInterface {
     
@@ -53,6 +55,18 @@ public class WikiData implements RecipeInterface {
             System.err.println("DBG: Lets cook some WikiData!");
             String api = Saxon.xpath2string(config, "nde:api", null, Registry.NAMESPACES);
             String cs  = Saxon.xpath2string(config, "nde:conceptScheme", null, Registry.NAMESPACES);
+            
+            // see if api supports the use of '*'; should be boolean instead of string
+            String wildcard = Saxon.xpath2string(config, "nde:wildcard",null, Registry.NAMESPACES);
+
+            // remove '*' if wildcards are not supported
+            if ( wildcard.equals("no") ) {
+                match = match.replaceAll("\\*","");
+            }
+
+            // encode the match string 
+            match = URLEncoder.encode(match, "UTF-8");
+
             System.err.println("DBG: Ingredients:");
             System.err.println("DBG: - instance["+Saxon.xpath2string(config, "(nde:label)[1]", null, Registry.NAMESPACES)+"]");
             System.err.println("DBG: - api["+api+"]");
@@ -75,9 +89,9 @@ public class WikiData implements RecipeInterface {
 				term.altLabel.add(termObject.getString("label"));
 				
 				terms.add(term);
-			}
-
-        } catch (SaxonApiException | MalformedURLException  | URISyntaxException ex) {
+            }
+             
+        } catch (IOException | SaxonApiException | URISyntaxException ex) {
             Logger.getLogger(WikiData.class.getName()).log(Level.SEVERE, null, ex);
         }
         return terms;
