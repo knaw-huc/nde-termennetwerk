@@ -71,6 +71,14 @@ query {
   }
 }
 ```
+```graphql
+# Example: Stichting Omroep Muziek Termen
+query {
+  terms(match:"cello" dataset:["som"] ) {
+    dataset label terms { uri prefLabel scopeNote } 
+  }
+}
+```
 
 or via curl:
 
