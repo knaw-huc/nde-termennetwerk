@@ -34,7 +34,7 @@ public class OpenSKOS implements RecipeInterface {
         try {
             System.err.println("DBG: Lets cook some OpenSKOS!");
             String api = Saxon.xpath2string(config, "nde:api", null, OpenSKOS.NAMESPACES);
-            String cs  = Saxon.xpath2string(config, "nde:conceptScheme", null, OpenSKOS.NAMESPACES);
+            String cs  = Saxon.xpath2string(config, "nde:scheme", null, OpenSKOS.NAMESPACES);
             System.err.println("DBG: Ingredients:");
             System.err.println("DBG: - instance["+Saxon.xpath2string(config, "(nde:label)[1]", null, OpenSKOS.NAMESPACES)+"]");
             System.err.println("DBG: - api["+api+"]");
