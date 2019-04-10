@@ -2,6 +2,8 @@
 
 Pilot implementation for the [NDE Termennetwerk](https://docs.google.com/document/d/11CLVYri6B1h4tHShhEmYYJB-y-bmS5cm3E5e7hZJLiQ/edit?usp=sharing) created for the [CLARIAH Techdag November 30, 2018](https://www.clariah.nl/evenementen/tech-dag-2-2018).
 
+Got a question about this pilot? Please [contact](mailto:tech@netwerkdigitaalerfgoed.nl) us!
+
 ## Build & Start
 
 ```sh
@@ -32,7 +34,7 @@ query { terms(match:"*Dutch*",dataset:["clavas"]) { dataset terms {uri, prefLabe
 ```
 
 ```graphql
-# Example: Gemeenschappelijke Thesaurus Audiovisuele Archieven (GTAA) en Wikidata 
+# Example: Gemeenschappelijke Thesaurus Audiovisuele Archieven (GTAA) en Wikidata
 query {
   terms(match:"*fietsen*" dataset:["gtaa","wikidata"]) { dataset terms {uri prefLabel altLabel} }
 }
@@ -42,7 +44,7 @@ query {
 # Example: Nederlandse Thesaurus van Auteursnamen (NTA)
 query {
   terms(match:"wolkers" dataset:["nta"] ) {
-    dataset label terms { uri prefLabel altLabel definition scopeNote } 
+    dataset label terms { uri prefLabel altLabel definition scopeNote }
   }
 }
 ```
@@ -50,8 +52,8 @@ query {
 ```graphql
 # Example: Cultuurhistorische Thesaurus (CHT) en Volkenkundige Thesaurus (SVCN)
 query {
-  terms(match:"amerika" dataset:["cht","svcn"]) { 
-    dataset terms {uri prefLabel altLabel scopeNote} 
+  terms(match:"amerika" dataset:["cht","svcn"]) {
+    dataset terms {uri prefLabel altLabel scopeNote}
   }
 }
 ```
@@ -59,7 +61,7 @@ query {
 # Example: WO2 Thesaurus
 query {
   terms(match:"bezetting" dataset:["wo2"] ) {
-    dataset label terms { uri prefLabel altLabel definition scopeNote } 
+    dataset label terms { uri prefLabel altLabel definition scopeNote }
   }
 }
 ```
@@ -67,7 +69,7 @@ query {
 # Example: AAT Thesaurus
 query {
   terms(match:"wiel*" dataset:["aat"] ) {
-    dataset label terms { uri prefLabel altLabel definition scopeNote } 
+    dataset label terms { uri prefLabel altLabel definition scopeNote }
   }
 }
 ```
@@ -75,7 +77,7 @@ query {
 # Example: Stichting Omroep Muziek Termen
 query {
   terms(match:"cello" dataset:["som"] ) {
-    dataset label terms { uri prefLabel scopeNote } 
+    dataset label terms { uri prefLabel scopeNote }
   }
 }
 ```
