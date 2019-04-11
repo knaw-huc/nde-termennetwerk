@@ -97,7 +97,12 @@ public class SparqlEndpoint implements RecipeInterface {
         if (statement.getPredicate().getLocalName().equals("scopeNote")) {
           term.scopeNote.add(statement.getObject().stringValue());
         }
-
+        if (statement.getPredicate().getLocalName().equals("broader")) {
+          term.broader.add(statement.getObject().stringValue());
+        }
+        if (statement.getPredicate().getLocalName().equals("narrower")) {
+          term.narrower.add(statement.getObject().stringValue());
+        }
       }
       terms.add(term);
 
