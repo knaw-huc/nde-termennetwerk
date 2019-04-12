@@ -11,4 +11,6 @@ public class TermDTO {
   public List<String> altLabel = Lists.newArrayList();
   public List<String> scopeNote = Lists.newArrayList();
   public List<String> definition = Lists.newArrayList();
+  public List<String> broader = Lists.newArrayList();
+  public List<String> narrower = Lists.newArrayList();
 }

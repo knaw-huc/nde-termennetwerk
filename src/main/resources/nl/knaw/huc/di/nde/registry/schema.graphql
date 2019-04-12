@@ -14,4 +14,6 @@ type Term {
   altLabel: [String]
   scopeNote: [String]
   definition: [String]
+  broader: [String]
+  narrower: [String]
 }
