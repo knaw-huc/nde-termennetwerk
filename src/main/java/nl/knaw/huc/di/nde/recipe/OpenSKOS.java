@@ -35,13 +35,28 @@ public class OpenSKOS implements RecipeInterface {
             System.err.println("DBG: Lets cook some OpenSKOS!");
             String api = Saxon.xpath2string(config, "nde:api", null, OpenSKOS.NAMESPACES);
             String cs  = Saxon.xpath2string(config, "nde:conceptScheme", null, OpenSKOS.NAMESPACES);
+
             System.err.println("DBG: Ingredients:");
             System.err.println("DBG: - instance["+Saxon.xpath2string(config, "(nde:label)[1]", null, OpenSKOS.NAMESPACES)+"]");
             System.err.println("DBG: - api["+api+"]");
             System.err.println("DBG: - conceptScheme["+cs+"]");
             System.err.println("DBG: - match["+match+"]");
+            
             // https://clavas.clarin.eu/clavas/public/api/find-concepts?q=prefLabel:*&conceptScheme=http://hdl.handle.net/11459/CLAVAS_810f8d2a-6723-3ba6-2e57-41d6d3844816&fl=uri,prefLabel&rows=100
-            URL url = new URL(api+"/find-concepts?q=prefLabel:"+match+"&scheme="+cs);//+"&fl=uri,prefLabel,altLabel"
+            // check if the parameter value for conceptScheme is valid, otherwise default to general search for tenant and collection.
+            // This was introduced because tenant beng has also expired conceptSchemes that never need to be consulted for NDE termennetwerk.
+            // by adding collection parameter this is prevented, but then the tenant also has to be given.
+            if ( cs!=null && !cs.isEmpty()) {
+            	URL url = new URL(api+"/find-concepts?q=prefLabel:"+match+"&scheme="+cs);//+"&fl=uri,prefLabel,altLabel"
+
+            } else {
+		        String collection  = Saxon.xpath2string(config, "nde:collection", null, OpenSKOS.NAMESPACES);
+		        String tenant  = Saxon.xpath2string(config, "nde:tenant", null, OpenSKOS.NAMESPACES);
+	            System.err.println("DBG: - tenant["+tenant+"]");
+	            System.err.println("DBG: - collection["+collection+"]");
+            	URL url = new URL(api+"/find-concepts?q=prefLabel:"+match+"&tenant="+tenant+"&collection="+collection);//+"&fl=uri,prefLabel,altLabel"
+            }
+
             System.err.println("DBG: = url["+url+"]");
             XdmNode res = Saxon.buildDocument(new StreamSource(url.toString()));
             for (Iterator<XdmItem> iter = Saxon.xpathIterator(res, "/rdf:RDF/rdf:Description",null, OpenSKOS.NAMESPACES); iter.hasNext();) {
