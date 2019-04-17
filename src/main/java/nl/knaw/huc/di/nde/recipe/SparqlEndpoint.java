@@ -92,6 +92,9 @@ public class SparqlEndpoint implements RecipeInterface {
           term.altLabel.add(statement.getObject().stringValue());
         }
         if (statement.getPredicate().getLocalName().equals("hiddenLabel")) {
+          term.hiddenLabel.add(statement.getObject().stringValue());
+        }
+        if (statement.getPredicate().getLocalName().equals("definition")) {
           term.definition.add(statement.getObject().stringValue());
         }
         if (statement.getPredicate().getLocalName().equals("scopeNote")) {
