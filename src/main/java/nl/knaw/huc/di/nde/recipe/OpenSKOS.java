@@ -46,15 +46,16 @@ public class OpenSKOS implements RecipeInterface {
             // check if the parameter value for conceptScheme is valid, otherwise default to general search for tenant and collection.
             // This was introduced because tenant beng has also expired conceptSchemes that never need to be consulted for NDE termennetwerk.
             // by adding collection parameter this is prevented, but then the tenant also has to be given.
-            if ( cs!=null && !cs.isEmpty()) {
-            	URL url = new URL(api+"/find-concepts?q=prefLabel:"+match+"&scheme="+cs);//+"&fl=uri,prefLabel,altLabel"
+            URL url = null;
+            if ( cs != null && !cs.isEmpty()) {
+            	url = new URL(api+"/find-concepts?q=prefLabel:"+match+"&scheme="+cs);//+"&fl=uri,prefLabel,altLabel"
 
             } else {
 		        String collection  = Saxon.xpath2string(config, "nde:collection", null, OpenSKOS.NAMESPACES);
 		        String tenant  = Saxon.xpath2string(config, "nde:tenant", null, OpenSKOS.NAMESPACES);
 	            System.err.println("DBG: - tenant["+tenant+"]");
 	            System.err.println("DBG: - collection["+collection+"]");
-            	URL url = new URL(api+"/find-concepts?q=prefLabel:"+match+"&tenant="+tenant+"&collection="+collection);//+"&fl=uri,prefLabel,altLabel"
+            	url = new URL(api+"/find-concepts?q=prefLabel:"+match+"&tenant="+tenant+"&collection="+collection);//+"&fl=uri,prefLabel,altLabel"
             }
 
             System.err.println("DBG: = url["+url+"]");
