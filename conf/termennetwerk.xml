@@ -15,38 +15,38 @@
         <nde:api>https://www.wikidata.org</nde:api>
     </nde:dataset>
     <nde:dataset id="gtaa" recipe="nl.knaw.huc.di.nde.recipe.OpenSKOS">
-        <nde:label xml:lang="nl">Gemeenschappelijke Thesaurus Audiovisuele Archieven (B&amp;G)</nde:label>
+        <nde:label xml:lang="nl">GTAA (B&amp;G)</nde:label>
         <nde:api>http://openskos.beeldengeluid.nl/api</nde:api>
         <nde:tenant>beng</nde:tenant>
         <nde:collection>gtaa</nde:collection>
     </nde:dataset>
     <nde:dataset id="gtaaonderwerpen" recipe="nl.knaw.huc.di.nde.recipe.OpenSKOS">
-        <nde:label xml:lang="nl">B&amp;G: GTAA Onderwerpen</nde:label>
+        <nde:label xml:lang="nl">GTAA Onderwerpen (B&amp;G)</nde:label>
         <nde:api>http://openskos.beeldengeluid.nl/api</nde:api>
         <nde:conceptScheme>http://data.beeldengeluid.nl/gtaa/Onderwerpen</nde:conceptScheme>
     </nde:dataset>
     <nde:dataset id="gtaaplaatsen" recipe="nl.knaw.huc.di.nde.recipe.OpenSKOS">
-        <nde:label xml:lang="nl">B&amp;G: GTAA Plaatsen</nde:label>
+        <nde:label xml:lang="nl">GTAA Plaatsen (B&amp;G)</nde:label>
         <nde:api>http://openskos.beeldengeluid.nl/api</nde:api>
         <nde:conceptScheme>http://data.beeldengeluid.nl/gtaa/GeografischeNamen</nde:conceptScheme>
     </nde:dataset>
     <nde:dataset id="gtaapersonen" recipe="nl.knaw.huc.di.nde.recipe.OpenSKOS">
-        <nde:label xml:lang="nl">B&amp;G: GTAA Personen</nde:label>
+        <nde:label xml:lang="nl">GTAA Personen (B&amp;G)</nde:label>
         <nde:api>http://openskos.beeldengeluid.nl/api</nde:api>
         <nde:conceptScheme>http://data.beeldengeluid.nl/gtaa/Persoonsnamen</nde:conceptScheme>
     </nde:dataset>
     <nde:dataset id="gtaanamen" recipe="nl.knaw.huc.di.nde.recipe.OpenSKOS">
-        <nde:label xml:lang="nl">B&amp;G: GTAA Namen</nde:label>
+        <nde:label xml:lang="nl">GTAA Namen (B&amp;G)</nde:label>
         <nde:api>http://openskos.beeldengeluid.nl/api</nde:api>
         <nde:conceptScheme>http://data.beeldengeluid.nl/gtaa/Namen</nde:conceptScheme>
     </nde:dataset>
     <nde:dataset id="gtaagenre" recipe="nl.knaw.huc.di.nde.recipe.OpenSKOS">
-        <nde:label xml:lang="nl">B&amp;G: GTAA Genre</nde:label>
+        <nde:label xml:lang="nl">GTAA Genres (B&amp;G)</nde:label>
         <nde:api>http://openskos.beeldengeluid.nl/api</nde:api>
         <nde:conceptScheme>http://data.beeldengeluid.nl/gtaa/Genre</nde:conceptScheme>
     </nde:dataset>
     <nde:dataset id="gtaaclassificatie" recipe="nl.knaw.huc.di.nde.recipe.OpenSKOS">
-        <nde:label xml:lang="nl">B&amp;G: GTAA Classificatie</nde:label>
+        <nde:label xml:lang="nl">GTAA Classificaties (B&amp;G)</nde:label>
         <nde:api>http://openskos.beeldengeluid.nl/api</nde:api>
         <nde:conceptScheme>http://data.beeldengeluid.nl/gtaa/Classificatie</nde:conceptScheme>
     </nde:dataset>
