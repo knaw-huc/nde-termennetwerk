@@ -96,15 +96,15 @@
         <nde:query>PREFIX%20som%3A%20%3Chttp%3A%2F%2Fdata.muziekschatten.nl%2Fsom%2F%3E%0ACONSTRUCT%0A%7B%3Furi%20a%20skos%3AConcept%3B%20skos%3AprefLabel%20%3FprefLabel%3B%20skos%3AscopeNote%20%3FscopeNote%3B%20skos%3Abroader%20%3Fbroader%20%7D%0AWHERE%20%7B%0Agraph%20%3Chttp%3A%2F%2Fdata.muziekschatten.nl%2Fsomlod%2F%3E%20%7B%0A%3Furi%20schema%3Akeywords%20%3Fkeywords%20.%0A%3Fkeywords%20bif%3Acontains%20%22%27${match}%27%22%20.%0A%3Furi%20schema%3Aname%20%3FprefLabel%20.%0AFILTER%20%28langMatches%28lang%28%3FprefLabel%29%2C%20%22nl%22%29%29%20%0A%7D%0A%0Agraph%20%3Chttp%3A%2F%2Fdata.muziekschatten.nl%2Fsom%2F%3E%20%7B%0A%3Furi%20som%3ABASIS%20%221%22%20.%0A%3Furi%20som%3ADC%20%3Fdc%0ABIND%28CONCAT%28%22Dewey%20code%3A%20%22%2C%3Fdc%29%20as%20%3FscopeNote%29%0A%7D%0A%0AOPTIONAL%20%7B%0A%20%3Furi%20skos%3Abroader%20%3Furi_broader%20.%0A%20%3Furi_broader%20schema%3Aname%20%3Fbroader%20.%0A%20FILTER%20%28langMatches%28lang%28%3Fbroader%29%2C%22nl%22%29%29%0A%7D%0A%7D%0ALIMIT%201000</nde:query>
     </nde:dataset>
     <nde:dataset id="erfgeo:street" recipe="nl.knaw.huc.di.nde.recipe.ErfGeo">
-        <nde:label xml:lang="nl">Straten in de Nederlandse topografie door de tijd (ErfGeo)</nde:label>
-        <nde:api>https://api.histograph.io/</nde:api>
+        <nde:label xml:lang="nl">Straten in de Nederlandse topografie door de tijd (ErfGeo via proxy)</nde:label>
+        <nde:api>https://www.hicsuntleones.nl/erfgeoproxy/</nde:api>
         <nde:base>https://erfgeo.nl/thesaurus/pit/?id=</nde:base>
         <nde:type>hg:Street</nde:type>
         <nde:wildcard>no</nde:wildcard>
     </nde:dataset>
-    <nde:dataset id="erfgeo:place" recipe="nl.knaw.huc.di.nde.recipe.ErfGeo">
-        <nde:label xml:lang="nl">Plaatsen in de Nederlandse topografie door de tijd - (ErfGeo)</nde:label>
-        <nde:api>https://api.histograph.io/</nde:api>
+    <nde:dataset id="erfgeo" recipe="nl.knaw.huc.di.nde.recipe.ErfGeo">
+        <nde:label xml:lang="nl">Plaatsen in de Nederlandse topografie door de tijd - (ErfGeo via proxy)</nde:label>
+        <nde:api>https://www.hicsuntleones.nl/erfgeoproxy/</nde:api>
         <nde:base>https://erfgeo.nl/thesaurus/pit/?id=</nde:base>
         <nde:type>hg:Place</nde:type>
         <nde:wildcard>no</nde:wildcard>

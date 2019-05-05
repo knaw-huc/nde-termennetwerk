@@ -81,7 +81,53 @@ query {
   }
 }
 ```
+```graphql
+# Example: Stichting Omroep Muziek Termen
+query {
+  terms(match:"cello" dataset:["som"] ) {
+    dataset label terms { uri prefLabel scopeNote }
+  }
+}
+```
+```graphql
+# Example queries for the Erfgeo connector (default type hg:Place)
 
+query {
+  terms(match:"Hoorn" dataset:[ "erfgeo"] ) {
+    dataset
+    label
+    terms { uri prefLabel altLabel related }
+  } 
+}
+
+query {
+  terms(match:"Zardam" dataset:[ "erfgeo"] ) {
+    dataset
+    label
+    terms { uri prefLabel altLabel related }
+  } 
+}
+
+# And additional support for the hg:Street type 
+# using 'erfgeo:street' as dataset name
+# add defintions in /conf/termennetwerk.xml to add other types
+query {
+  terms(match:"Begijnhof" dataset:[ "erfgeo:street"] ) {
+    dataset
+    label
+    terms { uri prefLabel altLabel related }
+  } 
+}
+
+query {
+  terms(match:"dam, middelburg" dataset:[ "erfgeo:street"] ) {
+    dataset
+    label
+    terms { uri prefLabel altLabel related }
+  } 
+}
+
+```
 or via curl:
 
 ```sh
