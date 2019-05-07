@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,26 +54,24 @@ public class ErfGeo implements RecipeInterface {
     private static TermDTO processItem(JSONObject itemObject, TermDTO term, String base) {
 
         String name =""; String uristr = ""; String id = "";
-        URI uri = null;
         try {
             if (itemObject.has("name")) { name = itemObject.getString("name"); }
             if (itemObject.has("uri")) { uristr = itemObject.getString("uri"); }
             if (itemObject.has("id")) { uristr = itemObject.getString("id"); }
-            if ( uristr.toLowerCase().contains("http") ) {
-                uri = new URI(uristr);
-            }
-            else {
+            if ( !uristr.toLowerCase().contains("http") ) {
                 // build a uri based on the erfgeo url in 'base'
-                uri = new URI(base + uristr); 
+                uristr = base + uristr; 
             }
             // first start with uri and prefLabel
             if (term.uri == null ) {
-                term.uri=uri;
+                term.uri= new URI(uristr);
                 term.prefLabel.add(name);
             }
             // all the others are added as related terms
             else {
-                term.related.add(name + " | " + uri);
+                JSONObject link = new JSONObject();
+                link.put(name,uristr);
+                term.related.add(link);
             }
         }
         catch (URISyntaxException ex) {
@@ -147,7 +146,8 @@ public class ErfGeo implements RecipeInterface {
                 }
                 // add the labels a alternate names in the result
                 if ( resultObject.has("known-names") ) {
-                    term.altLabel.add(resultObject.getString("known-names"));
+                    List<String> labels = Arrays.asList(resultObject.getString("known-names").split(","));
+                    term.altLabel.addAll(labels);
                     resultObject.remove("know-names");
                 }
                 Iterator<String> keys = resultObject.keys();

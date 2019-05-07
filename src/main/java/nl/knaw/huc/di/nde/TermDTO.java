@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 
 import java.net.URI;
 import java.util.List;
+import org.json.*;
 
 public class TermDTO {
   public URI uri;
@@ -14,5 +15,5 @@ public class TermDTO {
   public List<String> definition = Lists.newArrayList();
   public List<String> broader = Lists.newArrayList();
   public List<String> narrower = Lists.newArrayList();
-  public List<String> related = Lists.newArrayList();
+  public List<JSONObject> related = Lists.newArrayList();
 }
