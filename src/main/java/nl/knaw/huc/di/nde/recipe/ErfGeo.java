@@ -15,6 +15,7 @@ import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmItem;
 import nl.knaw.huc.di.nde.Registry;
 import nl.knaw.huc.di.nde.TermDTO;
+import nl.knaw.huc.di.nde.RefDTO;
 import nl.mpi.tla.util.Saxon;
 import java.io.IOException;
 import java.io.InputStream;
@@ -69,9 +70,10 @@ public class ErfGeo implements RecipeInterface {
             }
             // all the others are added as related terms
             else {
-                JSONObject link = new JSONObject();
-                link.put(name,uristr);
-                term.related.add(link);
+                RefDTO ref = new RefDTO();
+                ref.label.add(name);
+                ref.url.add(uristr);
+                term.related.add(ref);
             }
         }
         catch (URISyntaxException ex) {
@@ -91,6 +93,8 @@ public class ErfGeo implements RecipeInterface {
             String wildcard = Saxon.xpath2string(config, "nde:wildcard",null, Registry.NAMESPACES);
             String base = Saxon.xpath2string(config, "nde:base",null, Registry.NAMESPACES);
             String type = Saxon.xpath2string(config, "nde:type",null, Registry.NAMESPACES);
+            String order = Saxon.xpath2string(config, "nde:order",null, Registry.NAMESPACES);
+
             // remove '*' if wildcards are not supported
             if ( wildcard.equals("no") ) {
                 match = match.replaceAll("\\*","");
@@ -121,29 +125,21 @@ public class ErfGeo implements RecipeInterface {
                 System.err.println("DBG: - result number: "+ i);
                 JSONObject resultObject = resultsArray.getJSONObject(i);
                 term = new TermDTO();
-                // todo: reduce the next part to something with a functional call
-                // todo: implement broader scope then only hg:Place for this part
-                // see if one of the results is a geonames reference
+
+                // see if the results contains one of the prio sources
                 // if so use this would be a good uri candidate
-                if ( type == "hg:Place" & resultObject.has("geonames") ) {
-                    JSONObject itemObject = resultObject.getJSONObject("geonames");
-                    term = processItem(itemObject, term, base);
-                    resultObject.remove("geonames");
+                String[] sourceOrder = order.split(",");
+                for (int j = 0; j < sourceOrder.length; j++) {
+                    String source = sourceOrder[j];
+                    // todo: implement broader scope then only hg:Place for this part
+                    // todo: this assumes that this level is a JSON object and not an array
+                    if ( type.equals("hg:Place") && resultObject.has(source) ) {
+                        JSONObject itemObject = resultObject.getJSONObject(source);
+                        term = processItem(itemObject, term, base);
+                        resultObject.remove(source);
+                    }                    
                 }
-                // see if there is a getty uri 
-                // it will be used as uri when there was no geonames uri
-                // otherwise it will be add as one the related results
-                if ( type == "hg:Place" & resultObject.has("tgn") ) {
-                    JSONObject itemObject = resultObject.getJSONObject("tgn");
-                    term = processItem(itemObject, term, base);
-                    resultObject.remove("tgn");
-                }
-                // same for the bag uri when no geonames or tgn is available
-                if ( type == "hg:Place" & resultObject.has("bag") ) {
-                    JSONObject itemObject = resultObject.getJSONObject("bag");
-                    term = processItem(itemObject, term, base);
-                    resultObject.remove("bag");
-                }
+
                 // add the labels a alternate names in the result
                 if ( resultObject.has("known-names") ) {
                     List<String> labels = Arrays.asList(resultObject.getString("known-names").split(","));
@@ -154,15 +150,16 @@ public class ErfGeo implements RecipeInterface {
                 while (keys.hasNext()) {
                     String key = keys.next();
                     System.err.println("DBG: - working on key: "+ key);
+
                     // record the type field
                     if (key == "type" ) {
                        term.scopeNote.add(resultObject.getString("type"));
-                       
                        // no further processing necessary 
                        continue;
                     }
+
                     // the other results are the 'places in time' (pits)
-                    // structured as JSON objects or arrays 
+                    // either structured as JSON objects or arrays 
                     if (resultObject.get(key) instanceof JSONObject) {
                         JSONObject itemObject = resultObject.getJSONObject(key);
                         term = processItem(itemObject, term, base);

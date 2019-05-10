@@ -107,6 +107,7 @@
         <nde:api>https://www.hicsuntleones.nl/erfgeoproxy/</nde:api>
         <nde:base>https://erfgeo.nl/thesaurus/pit/?id=</nde:base>
         <nde:type>hg:Place</nde:type>
+        <nde:order>geonames,tgn,bag,kloeke</nde:order>
         <nde:wildcard>no</nde:wildcard>
     </nde:dataset>
 </nde:NDE>
