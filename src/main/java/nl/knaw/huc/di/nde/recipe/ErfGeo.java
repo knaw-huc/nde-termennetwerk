@@ -71,8 +71,8 @@ public class ErfGeo implements RecipeInterface {
             // all the others are added as related terms
             else {
                 RefDTO ref = new RefDTO();
-                ref.label.add(name);
-                ref.url.add(uristr);
+                ref.label=name;
+                ref.url=uristr;
                 term.related.add(ref);
             }
         }

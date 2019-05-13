@@ -20,6 +20,6 @@ type Term {
 }
 
 type Ref {
-  label: [String]
-  url: [String]
+  label: String
+  url: String
 }
