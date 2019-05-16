@@ -76,6 +76,12 @@ public class OpenSKOS implements RecipeInterface {
                 for (Iterator<XdmItem> lblIter = Saxon.xpathIterator(item, "skos:scopeNote",null, OpenSKOS.NAMESPACES); lblIter.hasNext();) {
                     term.scopeNote.add(lblIter.next().getStringValue());
                 }
+                for (Iterator<XdmItem> lblIter = Saxon.xpathIterator(item, "skos:broader",null, OpenSKOS.NAMESPACES); lblIter.hasNext();) {
+                    term.broader.add(lblIter.next().getStringValue());
+                }
+                for (Iterator<XdmItem> lblIter = Saxon.xpathIterator(item, "skos:narrower",null, OpenSKOS.NAMESPACES); lblIter.hasNext();) {
+                    term.narrower.add(lblIter.next().getStringValue());
+                }
                 terms.add(term);
             }
         } catch (SaxonApiException | MalformedURLException | URISyntaxException ex) {
