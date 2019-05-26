@@ -48,14 +48,14 @@ public class OpenSKOS implements RecipeInterface {
             // by adding collection parameter this is prevented, but then the tenant also has to be given.
             URL url = null;
             if ( cs != null && !cs.isEmpty()) {
-            	url = new URL(api+"/find-concepts?q=prefLabel:"+match+"&scheme="+cs);//+"&fl=uri,prefLabel,altLabel"
+            	url = new URL(api+"/find-concepts?q="+match+"&scheme="+cs);//+"&fl=uri,prefLabel,altLabel"
 
             } else {
 		        String collection  = Saxon.xpath2string(config, "nde:collection", null, OpenSKOS.NAMESPACES);
 		        String tenant  = Saxon.xpath2string(config, "nde:tenant", null, OpenSKOS.NAMESPACES);
 	            System.err.println("DBG: - tenant["+tenant+"]");
 	            System.err.println("DBG: - collection["+collection+"]");
-            	url = new URL(api+"/find-concepts?q=prefLabel:"+match+"&tenant="+tenant+"&collection="+collection);//+"&fl=uri,prefLabel,altLabel"
+            	url = new URL(api+"/find-concepts?q="+match+"&tenant="+tenant+"&collection="+collection);//+"&fl=uri,prefLabel,altLabel"
             }
 
             System.err.println("DBG: = url["+url+"]");
@@ -75,6 +75,12 @@ public class OpenSKOS implements RecipeInterface {
                 }
                 for (Iterator<XdmItem> lblIter = Saxon.xpathIterator(item, "skos:scopeNote",null, OpenSKOS.NAMESPACES); lblIter.hasNext();) {
                     term.scopeNote.add(lblIter.next().getStringValue());
+                }
+                for (Iterator<XdmItem> lblIter = Saxon.xpathIterator(item, "skos:broader",null, OpenSKOS.NAMESPACES); lblIter.hasNext();) {
+                    term.broader.add(lblIter.next().getStringValue());
+                }
+                for (Iterator<XdmItem> lblIter = Saxon.xpathIterator(item, "skos:narrower",null, OpenSKOS.NAMESPACES); lblIter.hasNext();) {
+                    term.narrower.add(lblIter.next().getStringValue());
                 }
                 terms.add(term);
             }
