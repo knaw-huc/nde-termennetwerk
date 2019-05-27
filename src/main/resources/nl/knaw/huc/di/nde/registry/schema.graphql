@@ -16,4 +16,5 @@ type Term {
   definition: [String]
   broader: [String]
   narrower: [String]
+  related: [String]
 }
