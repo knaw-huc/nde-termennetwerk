@@ -78,14 +78,17 @@ public class OpenSKOS implements RecipeInterface {
                     term.scopeNote.add(lblIter.next().getStringValue());
                 }
                 // Semantic relations
-                for (Iterator<XdmItem> lblIter = Saxon.xpathIterator(item, "skos:broader[@rdf:resource]",null, OpenSKOS.NAMESPACES); lblIter.hasNext();) {
-                    term.broader.add(lblIter.next().getStringValue());
+                for (Iterator<XdmItem> srIter = Saxon.xpathIterator(item, "skos:broader",null, OpenSKOS.NAMESPACES); srIter.hasNext();) {
+                    broaderUri = new URI(Saxon.xpath2string(srIter.next(), "@rdf:resource", null, OpenSKOS.NAMESPACES));
+                    term.broader.add(broaderUri);
                 }
-                for (Iterator<XdmItem> lblIter = Saxon.xpathIterator(item, "skos:narrower[@rdf:resource]",null, OpenSKOS.NAMESPACES); lblIter.hasNext();) {
-                    term.narrower.add(lblIter.next().getStringValue());
+                for (Iterator<XdmItem> srIter = Saxon.xpathIterator(item, "skos:narrower",null, OpenSKOS.NAMESPACES); srIter.hasNext();) {
+                    narrowerUri = new URI(Saxon.xpath2string(srIter.next(), "@rdf:resource", null, OpenSKOS.NAMESPACES));
+                    term.narrower.add(narrowerUri);
                 }
-                for (Iterator<XdmItem> lblIter = Saxon.xpathIterator(item, "skos:related[@rdf:resource]",null, OpenSKOS.NAMESPACES); lblIter.hasNext();) {
-                    term.related.add(lblIter.next().getStringValue());
+                for (Iterator<XdmItem> srIter = Saxon.xpathIterator(item, "skos:related",null, OpenSKOS.NAMESPACES); srIter.hasNext();) {
+                    relatedUri = new URI(Saxon.xpath2string(srIter.next(), "@rdf:resource", null, OpenSKOS.NAMESPACES));
+                    term.related.add(relatedUri);
                 }
                 terms.add(term);
             }
