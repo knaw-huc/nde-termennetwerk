@@ -17,6 +17,7 @@ import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmNode;
 import nl.knaw.huc.di.nde.Registry;
 import nl.knaw.huc.di.nde.TermDTO;
+import nl.knaw.huc.di.nde.RefDTO;
 import nl.mpi.tla.util.Saxon;
 
 public class OpenSKOS implements RecipeInterface {
@@ -64,6 +65,7 @@ public class OpenSKOS implements RecipeInterface {
                 XdmItem item = iter.next();
                 TermDTO term = new TermDTO();
                 term.uri = new URI(Saxon.xpath2string(item, "@rdf:about", null, OpenSKOS.NAMESPACES));
+                // properties
                 for (Iterator<XdmItem> lblIter = Saxon.xpathIterator(item, "skos:prefLabel",null, OpenSKOS.NAMESPACES); lblIter.hasNext();) {
                     term.prefLabel.add(lblIter.next().getStringValue());
                 }
@@ -76,11 +78,20 @@ public class OpenSKOS implements RecipeInterface {
                 for (Iterator<XdmItem> lblIter = Saxon.xpathIterator(item, "skos:scopeNote",null, OpenSKOS.NAMESPACES); lblIter.hasNext();) {
                     term.scopeNote.add(lblIter.next().getStringValue());
                 }
-                for (Iterator<XdmItem> lblIter = Saxon.xpathIterator(item, "skos:broader",null, OpenSKOS.NAMESPACES); lblIter.hasNext();) {
-                    term.broader.add(lblIter.next().getStringValue());
+                // Semantic relations
+                for (Iterator<XdmItem> srIter = Saxon.xpathIterator(item, "skos:broader",null, OpenSKOS.NAMESPACES); srIter.hasNext();) {
+                    URI broaderUri = new URI(Saxon.xpath2string(srIter.next(), "@rdf:resource", null, OpenSKOS.NAMESPACES));
+                    term.broader.add(broaderUri.toString());
                 }
-                for (Iterator<XdmItem> lblIter = Saxon.xpathIterator(item, "skos:narrower",null, OpenSKOS.NAMESPACES); lblIter.hasNext();) {
-                    term.narrower.add(lblIter.next().getStringValue());
+                for (Iterator<XdmItem> srIter = Saxon.xpathIterator(item, "skos:narrower",null, OpenSKOS.NAMESPACES); srIter.hasNext();) {
+                    URI narrowerUri = new URI(Saxon.xpath2string(srIter.next(), "@rdf:resource", null, OpenSKOS.NAMESPACES));
+                    term.narrower.add(narrowerUri.toString());
+                }
+                for (Iterator<XdmItem> srIter = Saxon.xpathIterator(item, "skos:related",null, OpenSKOS.NAMESPACES); srIter.hasNext();) {
+                    URI relatedUri = new URI(Saxon.xpath2string(srIter.next(), "@rdf:resource", null, OpenSKOS.NAMESPACES));
+                    RefDTO ref = new RefDTO();
+                    ref.url=relatedUri.toString();
+                    term.related.add(ref);
                 }
                 terms.add(term);
             }
