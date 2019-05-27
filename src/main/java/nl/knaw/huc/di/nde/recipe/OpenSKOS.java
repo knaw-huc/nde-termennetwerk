@@ -79,16 +79,16 @@ public class OpenSKOS implements RecipeInterface {
                 }
                 // Semantic relations
                 for (Iterator<XdmItem> srIter = Saxon.xpathIterator(item, "skos:broader",null, OpenSKOS.NAMESPACES); srIter.hasNext();) {
-                    broaderUri = new URI(Saxon.xpath2string(srIter.next(), "@rdf:resource", null, OpenSKOS.NAMESPACES));
-                    term.broader.add(broaderUri);
+                    URI broaderUri = new URI(Saxon.xpath2string(srIter.next(), "@rdf:resource", null, OpenSKOS.NAMESPACES));
+                    term.broader.add(broaderUri.toString());
                 }
                 for (Iterator<XdmItem> srIter = Saxon.xpathIterator(item, "skos:narrower",null, OpenSKOS.NAMESPACES); srIter.hasNext();) {
-                    narrowerUri = new URI(Saxon.xpath2string(srIter.next(), "@rdf:resource", null, OpenSKOS.NAMESPACES));
-                    term.narrower.add(narrowerUri);
+                    URI narrowerUri = new URI(Saxon.xpath2string(srIter.next(), "@rdf:resource", null, OpenSKOS.NAMESPACES));
+                    term.narrower.add(narrowerUri.toString());
                 }
                 for (Iterator<XdmItem> srIter = Saxon.xpathIterator(item, "skos:related",null, OpenSKOS.NAMESPACES); srIter.hasNext();) {
-                    relatedUri = new URI(Saxon.xpath2string(srIter.next(), "@rdf:resource", null, OpenSKOS.NAMESPACES));
-                    term.related.add(relatedUri);
+                    URI relatedUri = new URI(Saxon.xpath2string(srIter.next(), "@rdf:resource", null, OpenSKOS.NAMESPACES));
+                    term.related.add(relatedUri.toString());
                 }
                 terms.add(term);
             }
