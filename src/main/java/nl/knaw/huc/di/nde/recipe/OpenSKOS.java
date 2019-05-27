@@ -17,6 +17,7 @@ import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmNode;
 import nl.knaw.huc.di.nde.Registry;
 import nl.knaw.huc.di.nde.TermDTO;
+import nl.knaw.huc.di.nde.RefDTO;
 import nl.mpi.tla.util.Saxon;
 
 public class OpenSKOS implements RecipeInterface {
@@ -88,7 +89,9 @@ public class OpenSKOS implements RecipeInterface {
                 }
                 for (Iterator<XdmItem> srIter = Saxon.xpathIterator(item, "skos:related",null, OpenSKOS.NAMESPACES); srIter.hasNext();) {
                     URI relatedUri = new URI(Saxon.xpath2string(srIter.next(), "@rdf:resource", null, OpenSKOS.NAMESPACES));
-                    term.related.add(relatedUri.toString());
+                    RefDTO ref = new RefDTO();
+                    ref.url=relatedUri.toString();
+                    term.related.add(ref);
                 }
                 terms.add(term);
             }
