@@ -83,6 +83,13 @@
         <nde:query>PREFIX%20skos%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2004%2F02%2Fskos%2Fcore%23%3E%0ACONSTRUCT%20%7B%0A%20%20%3Furi%20a%20skos%3AConcept%20%3B%0A%20%20%20%20%20%20%20%20%20skos%3AprefLabel%20%3FprefLabel%20%3B%0A%20%20%20%20%20%20%20%20%20skos%3AaltLabel%20%3FaltLabel%20%3B%0A%20%20%20%20%20%20%20%20%20skos%3AhiddenLabel%20%3FhiddenLabel%20%3B%0A%20%20%20%20%20%20%20%20%20skos%3AscopeNote%20%3FscopeNote%20.%0A%7D%0AWHERE%20%7B%0A%20%20%3Furi%20skos%3AprefLabel%20%3FprefLabel%20%0A%20%20FILTER%20%28LANG%28%3FprefLabel%29%20%3D%20%22nl%22%29%20%0A%20%20FILTER%20%28CONTAINS%28LCASE%28%3FprefLabel%29%2C%20LCASE%28%22${match}%22%29%29%29%0A%20%20OPTIONAL%20%7B%20%3Furi%20skos%3AscopeNote%20%3FscopeNote%20%7D%0A%20%20OPTIONAL%20%7B%20%3Furi%20skos%3AaltLabel%20%3FaltLabel%20%7D%0A%20%20OPTIONAL%20%7B%20%3Furi%20skos%3AhiddenLabel%20%3FhiddenLabel%20%7D%0A%7D%0ALIMIT%201000</nde:query>
         <nde:wildcard>no</nde:wildcard>
     </nde:dataset>
+    <nde:dataset id="vtmk" recipe="nl.knaw.huc.di.nde.recipe.SparqlEndpoint">
+        <nde:label xml:lang="nl">Visuele Thesaurus voor Mode en Kostuums (ModeMuze)</nde:label>
+        <nde:api>https://vtmk.data.momu.be/PoolParty/sparql/id</nde:api>
+        <nde:base>https://vtmk.data.momu.be/id/</nde:base>
+        <nde:query>PREFIX%20skos%3A%20%3Chttp%3A%2F%2Fwww.w3.org%2F2004%2F02%2Fskos%2Fcore%23%3E%0ACONSTRUCT%20%7B%0A%3Furi%20a%20skos%3AConcept%20%3B%0Askos%3AprefLabel%20%3FprefLabel%20%3B%0Askos%3AaltLabel%20%3FaltLabel%20%3B%0Askos%3AhiddenLabel%20%3FhiddenLabel%20%3B%0Askos%3Abroader%20%3Fbroader%20%3B%0Askos%3Anarrower%20%3Fnarrower%20%3B%0Askos%3AscopeNote%20%3FscopeNote%20.%0A%7D%0AWHERE%20%7B%0A%3Furi%20skos%3AprefLabel%20%3FprefLabel%20%0AFILTER%20%28LANG%28%3FprefLabel%29%20%3D%20%22nl%22%29%20%0AFILTER%20%28CONTAINS%28LCASE%28%3FprefLabel%29%2C%20LCASE%28%22${match}%22%29%29%29%0AOPTIONAL%20%7B%20%3Furi%20skos%3AscopeNote%20%3FscopeNote%20%7D%0AOPTIONAL%20%7B%20%3Furi%20skos%3AaltLabel%20%3FaltLabel%20%7D%0AOPTIONAL%20%7B%20%3Furi%20skos%3AhiddenLabel%20%3FhiddenLabel%20%7D%0AOPTIONAL%20%7B%0A%3Furi%20skos%3Abroader%20%3Furi_broader%20.%0A%3Furi_broader%20skos%3AprefLabel%20%3Fbroader%20.%0AFILTER%20%28langMatches%28lang%28%3Fbroader%29%2C%22nl%22%29%29%0A%7D%0AOPTIONAL%20%7B%0A%3Furi%20skos%3Anarrower%20%3Furi_narrower%20.%0A%3Furi_narrower%20skos%3AprefLabel%20%3Fnarrower%20.%0AFILTER%20%28langMatches%28lang%28%3Fnarrower%29%2C%22nl%22%29%29%0A%7D%0A%7D%0ALIMIT%201000</nde:query>
+        <nde:wildcard>no</nde:wildcard>
+    </nde:dataset>
     <nde:dataset id="aat" recipe="nl.knaw.huc.di.nde.recipe.SparqlEndpoint">
         <nde:label xml:lang="nl">Art &amp; Architecture Thesaurus (Getty)</nde:label>
         <nde:api>http://vocab.getty.edu/sparql</nde:api>
