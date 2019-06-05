@@ -136,7 +136,16 @@ query {
     terms { uri prefLabel altLabel related }
   } 
 }
-
+```
+```graphql
+# Basic support for the all the AdamLink concepts 
+query {
+  terms(match:"Joden Breestraat" dataset:["adamlink"] ) {
+    dataset
+    label
+    terms { uri prefLabel altLabel scopeNote }
+  } 
+}
 ```
 or via curl:
 
