@@ -81,16 +81,23 @@ public class OpenSKOS implements RecipeInterface {
                 // Semantic relations
                 for (Iterator<XdmItem> srIter = Saxon.xpathIterator(item, "skos:broader",null, OpenSKOS.NAMESPACES); srIter.hasNext();) {
                     URI broaderUri = new URI(Saxon.xpath2string(srIter.next(), "@rdf:resource", null, OpenSKOS.NAMESPACES));
-                    term.broader.add(broaderUri.toString());
+                    RefDTO ref = new RefDTO();
+                    ref.url=broaderUri.toString();
+                    ref.label="";
+                    term.broader.add(ref);
                 }
                 for (Iterator<XdmItem> srIter = Saxon.xpathIterator(item, "skos:narrower",null, OpenSKOS.NAMESPACES); srIter.hasNext();) {
                     URI narrowerUri = new URI(Saxon.xpath2string(srIter.next(), "@rdf:resource", null, OpenSKOS.NAMESPACES));
-                    term.narrower.add(narrowerUri.toString());
+                    RefDTO ref = new RefDTO();
+                    ref.url=narrowerUri.toString();
+                    ref.label="";
+                    term.narrower.add(ref);
                 }
                 for (Iterator<XdmItem> srIter = Saxon.xpathIterator(item, "skos:related",null, OpenSKOS.NAMESPACES); srIter.hasNext();) {
                     URI relatedUri = new URI(Saxon.xpath2string(srIter.next(), "@rdf:resource", null, OpenSKOS.NAMESPACES));
                     RefDTO ref = new RefDTO();
                     ref.url=relatedUri.toString();
+                    ref.label="";
                     term.related.add(ref);
                 }
                 terms.add(term);

@@ -1,0 +1,38 @@
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+CONSTRUCT {
+  ?uri a skos:Concept ;
+    skos:prefLabel ?prefLabel ;
+    skos:altLabel ?altLabel ;
+    skos:hiddenLabel ?hiddenLabel ;
+    skos:broader ?broader_uri ;
+    skos:narrower ?narrower_uri ;
+    skos:related ?related_uri ;
+    skos:scopeNote ?scopeNote .
+  ?broader_uri skos:prefLabel ?broader_label .
+  ?narrower_uri skos:prefLabel ?narrower_label .
+  ?related_uri skos:prefLabel ?related_label .
+}
+WHERE {
+  ?uri skos:prefLabel ?prefLabel 
+  FILTER (LANG(?prefLabel) = "nl") 
+  FILTER (CONTAINS(LCASE(?prefLabel), LCASE("_SEARCH_")))
+  OPTIONAL { ?uri skos:scopeNote ?scopeNote }
+  OPTIONAL { ?uri skos:altLabel ?altLabel }
+  OPTIONAL { ?uri skos:hiddenLabel ?hiddenLabel }
+  OPTIONAL {
+    ?uri skos:broader ?broader_uri .
+    ?broader_uri skos:prefLabel ?broader_label .
+    FILTER (langMatches(lang(?broader_label),"nl"))
+  }
+  OPTIONAL {
+    ?uri skos:narrower ?narrower_uri .
+    ?narrower_uri skos:prefLabel ?narrower_label .
+    FILTER (langMatches(lang(?narrower_label),"nl"))
+  }
+  OPTIONAL {
+    ?uri skos:related ?related_uri .
+    ?related_uri skos:prefLabel ?related_label .
+    FILTER (langMatches(lang(?related_label),"nl"))
+  }
+}
+LIMIT 1000

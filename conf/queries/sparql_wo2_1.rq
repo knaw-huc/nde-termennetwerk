@@ -1,0 +1,17 @@
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+CONSTRUCT {
+  ?uri a skos:Concept ;
+         skos:prefLabel ?prefLabel ;
+         skos:altLabel ?altLabel ;
+         skos:hiddenLabel ?hiddenLabel ;
+         skos:scopeNote ?scopeNote .
+}
+WHERE {
+  ?uri skos:prefLabel ?prefLabel 
+  FILTER (LANG(?prefLabel) = "nl") 
+  FILTER (CONTAINS(LCASE(?prefLabel), LCASE("_SEARCH_")))
+  OPTIONAL { ?uri skos:scopeNote ?scopeNote }
+  OPTIONAL { ?uri skos:altLabel ?altLabel }
+  OPTIONAL { ?uri skos:hiddenLabel ?hiddenLabel }
+}
+LIMIT 1000

@@ -1,0 +1,30 @@
+PREFIX som: <http://data.muziekschatten.nl/som/>
+CONSTRUCT
+{
+  ?uri a skos:Concept; 
+       skos:prefLabel ?prefLabel; 
+       skos:scopeNote ?scopeNote; 
+       skos:broader ?broader_uri .
+  ?broader_uri skos:prefLabel ?broader_label .
+  }
+WHERE {
+  graph <http://data.muziekschatten.nl/somlod/> {
+    ?uri schema:keywords ?keywords .
+    ?keywords bif:contains "'_SEARCH_'" .
+    ?uri schema:name ?prefLabel .
+    FILTER (langMatches(lang(?prefLabel), "nl")) 
+  }
+
+  graph <http://data.muziekschatten.nl/som/> {
+    ?uri som:BASIS "1" .
+    ?uri som:DC ?dc
+    BIND(CONCAT("Dewey code: ",?dc) as ?scopeNote)
+  }
+
+  OPTIONAL {
+    ?uri skos:broader ?broader_uri .
+    ?broader_uri schema:name ?broader_label .
+    FILTER (langMatches(lang(?broader_label),"nl"))
+  }
+}
+LIMIT 1000

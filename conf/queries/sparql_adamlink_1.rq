@@ -1,0 +1,39 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX erfgeo: <http://rdf.histograph.io/>
+PREFIX schema: <http://schema.org/>
+PREFIX histo: <http://rdf.histograph.io/>
+CONSTRUCT {
+  ?uri a    skos:Concept; 
+            skos:scopeNote ?type_label; 
+            skos:prefLabel ?prefLabel; 
+            skos:altLabel ?altLabel
+  }
+WHERE {
+  {
+    ?uri skos:prefLabel ?label .
+	?label bif:contains "'_SEARCH_'" .
+  }
+  UNION {
+    ?uri skos:altLabel ?label .
+    ?label bif:contains "'_SEARCH_'" .
+  }
+
+  OPTIONAL {
+        ?uri skos:prefLabel ?prefLabel.
+  }
+  OPTIONAL {
+        ?uri skos:altLabel ?altLabel .
+  }
+  ?uri a skos:Concept .
+  ?uri a ?type .
+  BIND( 
+    IF (?type = skos:Concept,"Concept",
+    IF (?type = histo:Street,"Straat",
+    IF (?type = histo:Building,"Gebouw",
+    IF (?type = histo:district,"District",
+    IF(?type = schema:Person,"Persoon",
+    IF(?type = schema:Organization,"Organisatie",?type)))))) 
+    as ?type_label)
+}
