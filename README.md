@@ -90,6 +90,15 @@ query {
 }
 ```
 ```graphql
+# Example for the "Virtuele Thesaurus voor Mode en Kostuums"
+
+query {
+     terms(match:"overjas" dataset:[ "vtmk"] ) {
+    dataset label terms { uri prefLabel scopeNote altLabel broader narrower}
+  } 
+}
+```
+```graphql
 # Example queries for the Erfgeo connector (default type hg:Place)
 
 query {
@@ -107,7 +116,8 @@ query {
     terms { uri prefLabel altLabel related }
   } 
 }
-
+```
+```graphql
 # And additional support for the hg:Street type 
 # using 'erfgeo:street' as dataset name
 # add defintions in /conf/termennetwerk.xml to add other types
@@ -126,7 +136,16 @@ query {
     terms { uri prefLabel altLabel related }
   } 
 }
-
+```
+```graphql
+# Basic support for the all the AdamLink concepts 
+query {
+  terms(match:"Joden Breestraat" dataset:["adamlink"] ) {
+    dataset
+    label
+    terms { uri prefLabel altLabel scopeNote }
+  } 
+}
 ```
 or via curl:
 

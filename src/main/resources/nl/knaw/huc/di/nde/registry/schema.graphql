@@ -14,7 +14,12 @@ type Term {
   altLabel: [String]
   scopeNote: [String]
   definition: [String]
-  broader: [String]
-  narrower: [String]
-  related: [String]
+  broader: [Ref]
+  narrower: [Ref]
+  related: [Ref]
+}
+
+type Ref {
+  label: String
+  url: String
 }

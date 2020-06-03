@@ -1,0 +1,31 @@
+CONSTRUCT { ?uri a skos:Concept ; skos:prefLabel ?prefLabel ; skos:altLabel ?altLabel ; skos:broader ?b_uri; skos:related ?r_uri; skos:narrower ?n_uri; skos:scopeNote ?scopeNote . ?b_uri skos:prefLabel ?b_label . ?n_uri skos:prefLabel ?n_label . ?r_uri skos:prefLabel ?r_label}
+WHERE { graph <http://data.bibliotheken.nl/thes/> { 
+{ 
+?uri rdfs:label ?label .
+?label bif:contains "'_SEARCH_'"  .
+} UNION {
+?uri schema:alternateName ?label .
+?label bif:contains "'_SEARCH_'" .  
+} UNION {
+?uri schema:name ?label .
+?label bif:contains "'_SEARCH_'" .
+}
+OPTIONAL { ?uri rdfs:label ?prefLabel }
+OPTIONAL { 
+  ?uri skos:broader ?b_uri .
+  ?b_uri rdfs:label ?b_label . 
+ }
+OPTIONAL { 
+  ?uri skos:narrower ?n_uri .
+  ?n_uri rdfs:label ?n_label .
+}
+OPTIONAL {
+  ?uri skos:related ?r_uri .
+  ?r_uri rdfs:label ?r_label .
+}
+OPTIONAL { ?uri rdfs:comment ?scopeNote }
+OPTIONAL { ?uri skos:editorialNote ?scopeNote }
+OPTIONAL { ?uri schema:alternateName|schema:name ?altLabel }
+?uri skos:inScheme <http://data.bibliotheken.nl/id/scheme/brinkman>
+}}
+LIMIT 1000

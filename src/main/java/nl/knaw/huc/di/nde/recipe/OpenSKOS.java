@@ -17,6 +17,7 @@ import net.sf.saxon.s9api.XdmItem;
 import net.sf.saxon.s9api.XdmNode;
 import nl.knaw.huc.di.nde.Registry;
 import nl.knaw.huc.di.nde.TermDTO;
+import nl.knaw.huc.di.nde.RefDTO;
 import nl.mpi.tla.util.Saxon;
 
 public class OpenSKOS implements RecipeInterface {
@@ -48,14 +49,14 @@ public class OpenSKOS implements RecipeInterface {
             // by adding collection parameter this is prevented, but then the tenant also has to be given.
             URL url = null;
             if ( cs != null && !cs.isEmpty()) {
-            	url = new URL(api+"/find-concepts?q=prefLabel:"+match+"&scheme="+cs);//+"&fl=uri,prefLabel,altLabel"
+            	url = new URL(api+"/find-concepts?q="+match+"&scheme="+cs);//+"&fl=uri,prefLabel,altLabel"
 
             } else {
 		        String collection  = Saxon.xpath2string(config, "nde:collection", null, OpenSKOS.NAMESPACES);
 		        String tenant  = Saxon.xpath2string(config, "nde:tenant", null, OpenSKOS.NAMESPACES);
 	            System.err.println("DBG: - tenant["+tenant+"]");
 	            System.err.println("DBG: - collection["+collection+"]");
-            	url = new URL(api+"/find-concepts?q=prefLabel:"+match+"&tenant="+tenant+"&collection="+collection);//+"&fl=uri,prefLabel,altLabel"
+            	url = new URL(api+"/find-concepts?q="+match+"&tenant="+tenant+"&collection="+collection);//+"&fl=uri,prefLabel,altLabel"
             }
 
             System.err.println("DBG: = url["+url+"]");
@@ -64,6 +65,7 @@ public class OpenSKOS implements RecipeInterface {
                 XdmItem item = iter.next();
                 TermDTO term = new TermDTO();
                 term.uri = new URI(Saxon.xpath2string(item, "@rdf:about", null, OpenSKOS.NAMESPACES));
+                // properties
                 for (Iterator<XdmItem> lblIter = Saxon.xpathIterator(item, "skos:prefLabel",null, OpenSKOS.NAMESPACES); lblIter.hasNext();) {
                     term.prefLabel.add(lblIter.next().getStringValue());
                 }
@@ -75,6 +77,28 @@ public class OpenSKOS implements RecipeInterface {
                 }
                 for (Iterator<XdmItem> lblIter = Saxon.xpathIterator(item, "skos:scopeNote",null, OpenSKOS.NAMESPACES); lblIter.hasNext();) {
                     term.scopeNote.add(lblIter.next().getStringValue());
+                }
+                // Semantic relations
+                for (Iterator<XdmItem> srIter = Saxon.xpathIterator(item, "skos:broader",null, OpenSKOS.NAMESPACES); srIter.hasNext();) {
+                    URI broaderUri = new URI(Saxon.xpath2string(srIter.next(), "@rdf:resource", null, OpenSKOS.NAMESPACES));
+                    RefDTO ref = new RefDTO();
+                    ref.url=broaderUri.toString();
+                    ref.label="";
+                    term.broader.add(ref);
+                }
+                for (Iterator<XdmItem> srIter = Saxon.xpathIterator(item, "skos:narrower",null, OpenSKOS.NAMESPACES); srIter.hasNext();) {
+                    URI narrowerUri = new URI(Saxon.xpath2string(srIter.next(), "@rdf:resource", null, OpenSKOS.NAMESPACES));
+                    RefDTO ref = new RefDTO();
+                    ref.url=narrowerUri.toString();
+                    ref.label="";
+                    term.narrower.add(ref);
+                }
+                for (Iterator<XdmItem> srIter = Saxon.xpathIterator(item, "skos:related",null, OpenSKOS.NAMESPACES); srIter.hasNext();) {
+                    URI relatedUri = new URI(Saxon.xpath2string(srIter.next(), "@rdf:resource", null, OpenSKOS.NAMESPACES));
+                    RefDTO ref = new RefDTO();
+                    ref.url=relatedUri.toString();
+                    ref.label="";
+                    term.related.add(ref);
                 }
                 terms.add(term);
             }

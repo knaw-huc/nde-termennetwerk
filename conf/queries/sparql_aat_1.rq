@@ -1,0 +1,40 @@
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX aat: <http://vocab.getty.edu/aat/>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX skosxl: <http://www.w3.org/2008/05/skos-xl#>
+PREFIX gvp: <http://vocab.getty.edu/ontology#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX luc: <http://www.ontotext.com/owlim/lucene#>
+CONSTRUCT {
+  ?uri a skos:Concept ;
+    skos:prefLabel ?prefLabel ;
+	skos:altLabel ?altLabel  ;
+	skos:scopeNote ?scopeNote ;
+	skos:broader ?broader_uri .
+  ?broader_uri skos:prefLabel ?broader_label .
+}
+WHERE  {
+  ?uri luc:term "_SEARCH_"; a ?typ.
+  ?typ rdfs:subClassOf gvp:Subject .
+  FILTER (?typ != gvp:Subject) .
+  ?uri skosxl:prefLabel ?mainLabel .
+  ?mainLabel dcterms:language aat:300388256 .
+  ?mainLabel skosxl:literalForm ?prefLabel .
+  ?uri skos:scopeNote ?sn .
+  ?sn dcterms:language aat:300388256 .
+  ?sn rdf:value ?scopeNote .
+
+  OPTIONAL {
+   ?uri skosxl:altLabel ?subLabel .
+   ?subLabel dcterms:language aat:300388256 .
+   ?subLabel skosxl:literalForm ?altLabel .
+  }
+
+  OPTIONAL {
+   ?uri gvp:broaderPreferred ?broader_uri .
+   ?broader_uri skosxl:prefLabel ?b_labels .
+   ?b_labels dcterms:language aat:300388256 .
+   ?b_labels skosxl:literalForm ?broader_label .
+  }
+}
