@@ -1,7 +1,6 @@
 package nl.knaw.huc.di.nde.recipe;
 
 import com.google.common.collect.Lists;
-import jdk.nashorn.internal.runtime.Debug;
 import net.sf.saxon.s9api.SaxonApiException;
 import net.sf.saxon.s9api.XdmItem;
 import nl.knaw.huc.di.nde.TermDTO;
@@ -26,15 +25,12 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import nl.knaw.huc.di.nde.Registry;
 
 public class SparqlEndpoint implements RecipeInterface {
 
   private static final Logger LOG = LoggerFactory.getLogger(SparqlEndpoint.class);
-  private static int DEBUG = 500;
+
   @Override
   public List<TermDTO> fetchMatchingTerms(XdmItem config, String match) {
 
@@ -52,20 +48,19 @@ public class SparqlEndpoint implements RecipeInterface {
       // see if api supports the use of '*'; should be boolean instead of string
       String wildcard = Saxon.xpath2string(config, "nde:wildcard",null, Registry.NAMESPACES);
 
-      LOG.info("DBG: wildcard support "+wildcard);
+      System.err.println("DBG: wildcard support "+wildcard);
 
       URLEncoder.encode(query, "UTF-8");
 
       // remove '*' if wildcards are not supported
       if ( wildcard.equals("no") ) {
-         match =match.replaceAll("\\*","");
+         match = match.replaceAll("\\*","");
       }
 
-      LOG.info("DBG: query (before) "+ query);
       query = URLDecoder.decode(query.replace("${match}", match).trim(), "UTF-8");
 
       // print out the query that is executed on the sparql endpoint
-      LOG.info("DBG: query "+query);
+      System.err.println("DBG: query "+query);
 
       CloseableHttpClient client = HttpClients.createDefault();
       HttpPost post = new HttpPost(api);
