@@ -48,19 +48,20 @@ public class SparqlEndpoint implements RecipeInterface {
       // see if api supports the use of '*'; should be boolean instead of string
       String wildcard = Saxon.xpath2string(config, "nde:wildcard",null, Registry.NAMESPACES);
 
-      System.err.println("DBG: wildcard support "+wildcard);
+      LOG.debug("DBG: wildcard support "+wildcard);
 
-      URLEncoder.encode(query, "UTF-8");
+      // URLEncoder.encode(query, "UTF-8");
 
       // remove '*' if wildcards are not supported
       if ( wildcard.equals("no") ) {
          match = match.replaceAll("\\*","");
       }
 
-      query = URLDecoder.decode(query.replace("${match}", match).trim(), "UTF-8");
+      // query = URLDecoder.decode(query.replace("${match}", match).trim(), "UTF-8");
+      query = query.replace("${match}", match).trim();
 
       // print out the query that is executed on the sparql endpoint
-      System.err.println("DBG: query "+query);
+      LOG.debug("DBG: query "+query);
 
       CloseableHttpClient client = HttpClients.createDefault();
       HttpPost post = new HttpPost(api);
