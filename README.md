@@ -144,4 +144,5 @@ $ curl -XPOST -H 'Content-Type:application/graphql'  -d 'query { terms(match:"Ab
 * [ ] fuller support for the NDE API design
 * [ ] how to deal with different response times
 * [ ] use Dropwizard
+* [ ] support literal SPARQL queries
 * [ ] ...
