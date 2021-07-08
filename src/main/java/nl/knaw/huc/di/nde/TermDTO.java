@@ -14,5 +14,5 @@ public class TermDTO {
   public List<String> definition = Lists.newArrayList();
   public List<String> broader = Lists.newArrayList();
   public List<String> narrower = Lists.newArrayList();
-  public List<String> related = Lists.newArrayList();
+  public List<RefDTO> related = Lists.newArrayList();
 }

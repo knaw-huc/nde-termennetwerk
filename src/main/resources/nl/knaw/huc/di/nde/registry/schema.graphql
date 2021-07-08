@@ -16,5 +16,10 @@ type Term {
   definition: [String]
   broader: [String]
   narrower: [String]
-  related: [String]
+  related: [Ref]
+}
+
+type Ref {
+  label: String
+  url: String
 }
